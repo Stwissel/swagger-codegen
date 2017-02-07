@@ -56,7 +56,11 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
      */
     modelTemplateFiles.put(
       "model.mustache", // the template to use
-      ".sample");       // the extension for each file to write
+      ".form");       // the extension for each file to write
+    
+    modelTemplateFiles.put(
+        "model.mustache", // the template to use
+        ".view");       // the extension for each file to write
 
     /**
      * Api classes.  You can write classes for each Api file with the apiTemplateFiles map.
@@ -81,7 +85,7 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
     /**
      * Model Package.  Optional, if needed, this can be used in templates
      */
-    modelPackage = "io.swagger.client.model";
+    modelPackage = "forms";
 
     /**
      * Reserved words.  Override this with reserved words specific to your language
@@ -105,7 +109,7 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
      */
     supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
       "",                                                       // the destination folder, relative `outputFolder`
-      "myFile.sample")                                          // the output file
+      "myFile.txt")                                          // the output file
     );
 
     /**
