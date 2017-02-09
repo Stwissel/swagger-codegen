@@ -55,11 +55,11 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
      * a different extension
      */
     modelTemplateFiles.put(
-      "model.mustache", // the template to use
+      "form_model.mustache", // the template to use
       ".form");       // the extension for each file to write
     
     modelTemplateFiles.put(
-        "model.mustache", // the template to use
+        "view_model.mustache", // the template to use
         ".view");       // the extension for each file to write
 
     /**
@@ -85,7 +85,7 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
     /**
      * Model Package.  Optional, if needed, this can be used in templates
      */
-    modelPackage = "forms";
+    modelPackage = "ondiskproject";
 
     /**
      * Reserved words.  Override this with reserved words specific to your language
@@ -192,4 +192,5 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
       type = swaggerType;
     return toModelName(type);
   }
+  
 }
