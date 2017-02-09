@@ -1,1 +1,25 @@
-Model for package: {{package}}
+{{#models}}
+{{#model}}
+<?xml version='1.0' encoding='utf-8'?>
+<form name='{{classname}}' alias='{{classname}}' xmlns='http://www.lotus.com/dxl' renderpassthrough='true'>
+<body><richtext>
+<pardef id='1'/>
+<par def='1'/>
+<table widthtype='fitmargins'>
+{{#vars}} 
+<tablerow>
+  <tablecell>
+    <par def='1'>{{baseName}}</par>
+  </tablecell>
+  <tablecell>
+    <par def='1'>
+      <field type='{{datatype}}' kind='editable' name='{{baseName}}'/>
+    </par>
+  </tablecell>
+</tablerow>
+{{/vars}}
+</table>
+<par def='1'/>
+</richtext></body></form>
+{{/model}}
+{{/models}}

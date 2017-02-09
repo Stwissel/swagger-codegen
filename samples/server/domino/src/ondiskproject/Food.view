@@ -1,1 +1,9 @@
-Model for package: ondiskproject
+Import Path : ondiskproject.Food
+View: food
+Columns:
+Name: unid
+Name: name
+Name: taste
+Name: color
+Name: shape
+Name: type

@@ -1,1 +1,6 @@
-Model for package: ondiskproject
+Import Path : ondiskproject.Cook
+View: cook
+Columns:
+Name: unid
+Name: name
+Name: specialty

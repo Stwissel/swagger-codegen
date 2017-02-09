@@ -1,1 +1,5 @@
-Model for package: ondiskproject
+Import Path : ondiskproject.ErrorModel
+View: errorModel
+Columns:
+Name: code
+Name: message

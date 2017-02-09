@@ -69,7 +69,7 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
      */
     apiTemplateFiles.put(
       "api.mustache",   // the template to use
-      ".sample");       // the extension for each file to write
+      ".java");       // the extension for each file to write
 
     /**
      * Template Location.  This is the location which templates will be read from.  The generator
@@ -80,12 +80,12 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
     /**
      * Api Package.  Optional, if needed, this can be used in templates
      */
-    apiPackage = "io.swagger.client.api";
+    apiPackage = "com.notessensei.domino.api";
 
     /**
      * Model Package.  Optional, if needed, this can be used in templates
      */
-    modelPackage = "ondiskproject";
+    modelPackage = "formview";
 
     /**
      * Reserved words.  Override this with reserved words specific to your language
@@ -121,6 +121,10 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
         "Type1",      // replace these with your types
         "Type2")
     );
+    
+    // Type mappings
+    this.typeMapping.put("Integer", "number");
+    this.typeMapping.put("String", "text");
   }
 
   /**
@@ -191,6 +195,18 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
     else
       type = swaggerType;
     return toModelName(type);
+  }
+
+  @Override
+  public String escapeUnsafeCharacters(String input) {
+ // TODO: do we actually need something here?
+    return input;
+  }
+
+  @Override
+  public String escapeQuotationMark(String input) {
+    // TODO: do we actually need something here?
+    return input;
   }
   
 }

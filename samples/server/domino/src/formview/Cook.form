@@ -10,7 +10,7 @@
   </tablecell>
   <tablecell>
     <par def='1'>
-      <field type='number' kind='editable' name='unid'/>
+      <field type='text' kind='editable' name='unid'/>
     </par>
   </tablecell>
 </tablerow>
