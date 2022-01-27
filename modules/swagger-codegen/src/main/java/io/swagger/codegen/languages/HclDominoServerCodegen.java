@@ -6,7 +6,7 @@ import io.swagger.models.properties.*;
 import java.util.*;
 import java.io.File;
 
-public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig {
+public class HclDominoServerCodegen extends DefaultCodegen implements CodegenConfig {
 
   // source folder where to write the files
   protected String sourceFolder = "src";
@@ -29,7 +29,7 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
    * @return the friendly name for the generator
    */
   public String getName() {
-    return "ibm-domino-server";
+    return "hcl-domino-server";
   }
 
   /**
@@ -46,7 +46,7 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
     super();
 
     // set the output folder here
-    outputFolder = "generated-code/ibm-domino-server";
+    outputFolder = "generated-code/hcl-domino-server";
 
     /**
      * Models.  You can write model files using the modelTemplateFiles map.
@@ -71,7 +71,7 @@ public class DominoServerCodegen extends DefaultCodegen implements CodegenConfig
      * Template Location.  This is the location which templates will be read from.  The generator
      * will use the resource stream to attempt to read the templates.
      */
-    templateDir = "ibm-domino-server";
+    templateDir = "hcl-domino-server";
 
     /**
      * Api Package.  Optional, if needed, this can be used in templates
