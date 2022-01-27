@@ -14,9 +14,15 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
 
 /**
  * HasOnlyReadOnly
@@ -33,7 +39,7 @@ public class HasOnlyReadOnly {
    * Get bar
    * @return bar
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getBar() {
     return bar;
   }
@@ -42,7 +48,7 @@ public class HasOnlyReadOnly {
    * Get foo
    * @return foo
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getFoo() {
     return foo;
   }
@@ -88,6 +94,6 @@ public class HasOnlyReadOnly {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
 }
 

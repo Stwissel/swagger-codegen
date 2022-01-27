@@ -14,10 +14,16 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.client.model.ReadOnlyFirst;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import android.os.Parcelable;
@@ -29,20 +35,25 @@ import android.os.Parcel;
 
 public class ArrayTest implements Parcelable {
   @SerializedName("array_of_string")
-  private List<String> arrayOfString = new ArrayList<String>();
+  private List<String> arrayOfString = null;
 
   @SerializedName("array_array_of_integer")
-  private List<List<Long>> arrayArrayOfInteger = new ArrayList<List<Long>>();
+  private List<List<Long>> arrayArrayOfInteger = null;
 
   @SerializedName("array_array_of_model")
-  private List<List<ReadOnlyFirst>> arrayArrayOfModel = new ArrayList<List<ReadOnlyFirst>>();
+  private List<List<ReadOnlyFirst>> arrayArrayOfModel = null;
 
+  public ArrayTest() {
+  }
   public ArrayTest arrayOfString(List<String> arrayOfString) {
     this.arrayOfString = arrayOfString;
     return this;
   }
 
   public ArrayTest addArrayOfStringItem(String arrayOfStringItem) {
+    if (this.arrayOfString == null) {
+      this.arrayOfString = new ArrayList<String>();
+    }
     this.arrayOfString.add(arrayOfStringItem);
     return this;
   }
@@ -51,7 +62,7 @@ public class ArrayTest implements Parcelable {
    * Get arrayOfString
    * @return arrayOfString
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public List<String> getArrayOfString() {
     return arrayOfString;
   }
@@ -66,6 +77,9 @@ public class ArrayTest implements Parcelable {
   }
 
   public ArrayTest addArrayArrayOfIntegerItem(List<Long> arrayArrayOfIntegerItem) {
+    if (this.arrayArrayOfInteger == null) {
+      this.arrayArrayOfInteger = new ArrayList<List<Long>>();
+    }
     this.arrayArrayOfInteger.add(arrayArrayOfIntegerItem);
     return this;
   }
@@ -74,7 +88,7 @@ public class ArrayTest implements Parcelable {
    * Get arrayArrayOfInteger
    * @return arrayArrayOfInteger
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public List<List<Long>> getArrayArrayOfInteger() {
     return arrayArrayOfInteger;
   }
@@ -89,6 +103,9 @@ public class ArrayTest implements Parcelable {
   }
 
   public ArrayTest addArrayArrayOfModelItem(List<ReadOnlyFirst> arrayArrayOfModelItem) {
+    if (this.arrayArrayOfModel == null) {
+      this.arrayArrayOfModel = new ArrayList<List<ReadOnlyFirst>>();
+    }
     this.arrayArrayOfModel.add(arrayArrayOfModelItem);
     return this;
   }
@@ -97,7 +114,7 @@ public class ArrayTest implements Parcelable {
    * Get arrayArrayOfModel
    * @return arrayArrayOfModel
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public List<List<ReadOnlyFirst>> getArrayArrayOfModel() {
     return arrayArrayOfModel;
   }
@@ -149,27 +166,20 @@ public class ArrayTest implements Parcelable {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
+
   public void writeToParcel(Parcel out, int flags) {
-     
     out.writeValue(arrayOfString);
-
     out.writeValue(arrayArrayOfInteger);
-
     out.writeValue(arrayArrayOfModel);
   }
 
-  public ArrayTest() {
-    super();
-  }
-
   ArrayTest(Parcel in) {
-    
     arrayOfString = (List<String>)in.readValue(null);
     arrayArrayOfInteger = (List<List<Long>>)in.readValue(List.class.getClassLoader());
     arrayArrayOfModel = (List<List<ReadOnlyFirst>>)in.readValue(List.class.getClassLoader());
   }
-  
+
   public int describeContents() {
     return 0;
   }

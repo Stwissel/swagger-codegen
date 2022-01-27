@@ -12,6 +12,9 @@ class {{classname}} {
   /// {{summary}}
   ///
   /// {{notes}}
+  {{#isDeprecated}}
+  @deprecated
+  {{/isDeprecated}}
   {{#returnType}}Future<{{{returnType}}}> {{/returnType}}{{^returnType}}Future {{/returnType}}{{nickname}}({{#allParams}}{{#required}}{{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/required}}{{/allParams}}{{#hasOptionalParams}}{ {{#allParams}}{{^required}}{{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/required}}{{/allParams}} }{{/hasOptionalParams}}) async {
     Object postBody = {{#bodyParam}}{{paramName}}{{/bodyParam}}{{^bodyParam}}null{{/bodyParam}};
 
@@ -25,7 +28,7 @@ class {{classname}} {
     {{/allParams}}
 
     // create path and map variables
-    String path = "{{path}}".replaceAll("{format}","json"){{#pathParams}}.replaceAll("{" + "{{paramName}}" + "}", {{{paramName}}}.toString()){{/pathParams}};
+    String path = "{{{path}}}".replaceAll("{format}","json"){{#pathParams}}.replaceAll("{" + "{{baseName}}" + "}", {{{paramName}}}.toString()){{/pathParams}};
 
     // query params
     List<QueryParam> queryParams = [];
@@ -54,7 +57,7 @@ class {{classname}} {
       {{#formParams}}{{#notFile}}
       if ({{paramName}} != null) {
         hasFields = true;
-        mp.fields['{{baseName}}'] = apiClient.parameterToString({{paramName}});
+        mp.fields['{{baseName}}'] = parameterToString({{paramName}});
       }
       {{/notFile}}{{#isFile}}
       if ({{paramName}} != null) {
@@ -68,7 +71,7 @@ class {{classname}} {
     }
     else {
       {{#formParams}}{{#notFile}}if ({{paramName}} != null)
-        formParams['{{baseName}}'] = apiClient.parameterToString({{paramName}});{{/notFile}}
+        formParams['{{baseName}}'] = parameterToString({{paramName}});{{/notFile}}
       {{/formParams}}
     }
 
@@ -84,7 +87,18 @@ class {{classname}} {
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return {{#returnType}}apiClient.deserialize(response.body, '{{{returnType}}}') as {{{returnType}}} {{/returnType}};
+      return 
+      {{#isListContainer}}
+        {{#returnType}}(apiClient.deserialize(response.body, '{{{returnType}}}') as List).map((item) => item as {{returnBaseType}}).toList();{{/returnType}}
+      {{/isListContainer}}
+      {{^isListContainer}}
+        {{#isMapContainer}}
+          {{#returnType}}new {{{returnType}}}.from(apiClient.deserialize(response.body, '{{{returnType}}}')) {{/returnType}};
+        {{/isMapContainer}}
+        {{^isMapContainer}}
+          {{#returnType}}apiClient.deserialize(response.body, '{{{returnType}}}') as {{{returnType}}} {{/returnType}};
+        {{/isMapContainer}}
+      {{/isListContainer}}
     } else {
       return {{#returnType}}null{{/returnType}};
     }

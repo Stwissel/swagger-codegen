@@ -14,15 +14,18 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.UUID;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 /**
  * FormatTest
@@ -60,7 +63,7 @@ public class FormatTest {
   private LocalDate date = null;
 
   @JsonProperty("dateTime")
-  private DateTime dateTime = null;
+  private OffsetDateTime dateTime = null;
 
   @JsonProperty("uuid")
   private UUID uuid = null;
@@ -79,9 +82,7 @@ public class FormatTest {
    * maximum: 100
    * @return integer
   **/
-  @Min(10)
-  @Max(100)
-  @ApiModelProperty(example = "null", value = "")
+ @Min(10) @Max(100)  @ApiModelProperty(value = "")
   public Integer getInteger() {
     return integer;
   }
@@ -101,9 +102,7 @@ public class FormatTest {
    * maximum: 200
    * @return int32
   **/
-  @Min(20)
-  @Max(200)
-  @ApiModelProperty(example = "null", value = "")
+ @Min(20) @Max(200)  @ApiModelProperty(value = "")
   public Integer getInt32() {
     return int32;
   }
@@ -121,7 +120,7 @@ public class FormatTest {
    * Get int64
    * @return int64
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Long getInt64() {
     return int64;
   }
@@ -142,9 +141,8 @@ public class FormatTest {
    * @return number
   **/
   @NotNull
-  @DecimalMin("32.1")
-  @DecimalMax("543.2")
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @Valid
+ @DecimalMin("32.1") @DecimalMax("543.2")  @ApiModelProperty(required = true, value = "")
   public BigDecimal getNumber() {
     return number;
   }
@@ -164,9 +162,7 @@ public class FormatTest {
    * maximum: 987.6
    * @return _float
   **/
-  @DecimalMin("54.3")
-  @DecimalMax("987.6")
-  @ApiModelProperty(example = "null", value = "")
+ @DecimalMin("54.3") @DecimalMax("987.6")  @ApiModelProperty(value = "")
   public Float getFloat() {
     return _float;
   }
@@ -186,9 +182,7 @@ public class FormatTest {
    * maximum: 123.4
    * @return _double
   **/
-  @DecimalMin("67.8")
-  @DecimalMax("123.4")
-  @ApiModelProperty(example = "null", value = "")
+ @DecimalMin("67.8") @DecimalMax("123.4")  @ApiModelProperty(value = "")
   public Double getDouble() {
     return _double;
   }
@@ -206,8 +200,7 @@ public class FormatTest {
    * Get string
    * @return string
   **/
-  @Pattern(regexp="/[a-z]/i")
-  @ApiModelProperty(example = "null", value = "")
+ @Pattern(regexp="/[a-z]/i")  @ApiModelProperty(value = "")
   public String getString() {
     return string;
   }
@@ -226,7 +219,7 @@ public class FormatTest {
    * @return _byte
   **/
   @NotNull
-  @ApiModelProperty(example = "null", required = true, value = "")
+ @Pattern(regexp="^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")  @ApiModelProperty(required = true, value = "")
   public byte[] getByte() {
     return _byte;
   }
@@ -244,7 +237,7 @@ public class FormatTest {
    * Get binary
    * @return binary
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public byte[] getBinary() {
     return binary;
   }
@@ -263,7 +256,8 @@ public class FormatTest {
    * @return date
   **/
   @NotNull
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @Valid
+  @ApiModelProperty(required = true, value = "")
   public LocalDate getDate() {
     return date;
   }
@@ -272,7 +266,7 @@ public class FormatTest {
     this.date = date;
   }
 
-  public FormatTest dateTime(DateTime dateTime) {
+  public FormatTest dateTime(OffsetDateTime dateTime) {
     this.dateTime = dateTime;
     return this;
   }
@@ -281,12 +275,13 @@ public class FormatTest {
    * Get dateTime
    * @return dateTime
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public DateTime getDateTime() {
+  @Valid
+  @ApiModelProperty(value = "")
+  public OffsetDateTime getDateTime() {
     return dateTime;
   }
 
-  public void setDateTime(DateTime dateTime) {
+  public void setDateTime(OffsetDateTime dateTime) {
     this.dateTime = dateTime;
   }
 
@@ -299,7 +294,8 @@ public class FormatTest {
    * Get uuid
    * @return uuid
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @Valid
+  @ApiModelProperty(value = "")
   public UUID getUuid() {
     return uuid;
   }
@@ -318,8 +314,7 @@ public class FormatTest {
    * @return password
   **/
   @NotNull
-  @Size(min=10,max=64)
-  @ApiModelProperty(example = "null", required = true, value = "")
+ @Size(min=10,max=64)  @ApiModelProperty(required = true, value = "")
   public String getPassword() {
     return password;
   }
@@ -345,8 +340,8 @@ public class FormatTest {
         Objects.equals(this._float, formatTest._float) &&
         Objects.equals(this._double, formatTest._double) &&
         Objects.equals(this.string, formatTest.string) &&
-        Objects.equals(this._byte, formatTest._byte) &&
-        Objects.equals(this.binary, formatTest.binary) &&
+        Arrays.equals(this._byte, formatTest._byte) &&
+        Arrays.equals(this.binary, formatTest.binary) &&
         Objects.equals(this.date, formatTest.date) &&
         Objects.equals(this.dateTime, formatTest.dateTime) &&
         Objects.equals(this.uuid, formatTest.uuid) &&
@@ -355,7 +350,7 @@ public class FormatTest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(integer, int32, int64, number, _float, _double, string, _byte, binary, date, dateTime, uuid, password);
+    return Objects.hash(integer, int32, int64, number, _float, _double, string, Arrays.hashCode(_byte), Arrays.hashCode(binary), date, dateTime, uuid, password);
   }
 
 
@@ -391,6 +386,6 @@ public class FormatTest {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
 }
 

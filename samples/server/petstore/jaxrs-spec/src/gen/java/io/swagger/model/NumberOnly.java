@@ -1,16 +1,19 @@
 package io.swagger.model;
 
 import java.math.BigDecimal;
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class NumberOnly   {
+public class NumberOnly  implements Serializable {
   
-  private BigDecimal justNumber = null;
+  private @Valid BigDecimal justNumber = null;
 
   /**
    **/
@@ -20,7 +23,8 @@ public class NumberOnly   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("JustNumber")
   public BigDecimal getJustNumber() {
     return justNumber;
   }
@@ -30,7 +34,7 @@ public class NumberOnly   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -60,10 +64,11 @@ public class NumberOnly   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

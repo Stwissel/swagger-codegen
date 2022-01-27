@@ -72,9 +72,9 @@ public class JaxRSServerOptionsTest extends AbstractOptionsTest {
             times = 1;
             clientCodegen.setDateLibrary("joda");
             times = 1;
-            clientCodegen.setSupportJava6(false);
-            times = 1;
             clientCodegen.setUseBeanValidation(Boolean.valueOf(JaxRSServerOptionsProvider.USE_BEANVALIDATION));
+            times = 1;
+            clientCodegen.setUseTags(Boolean.valueOf(JaxRSServerOptionsProvider.USE_TAGS));
             times = 1;
         }};
     }

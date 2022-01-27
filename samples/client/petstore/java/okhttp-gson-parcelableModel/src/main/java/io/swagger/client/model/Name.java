@@ -14,9 +14,15 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
 import android.os.Parcelable;
 import android.os.Parcel;
 
@@ -38,6 +44,8 @@ public class Name implements Parcelable {
   @SerializedName("123Number")
   private Integer _123Number = null;
 
+  public Name() {
+  }
   public Name name(Integer name) {
     this.name = name;
     return this;
@@ -47,7 +55,7 @@ public class Name implements Parcelable {
    * Get name
    * @return name
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public Integer getName() {
     return name;
   }
@@ -60,7 +68,7 @@ public class Name implements Parcelable {
    * Get snakeCase
    * @return snakeCase
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Integer getSnakeCase() {
     return snakeCase;
   }
@@ -74,7 +82,7 @@ public class Name implements Parcelable {
    * Get property
    * @return property
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getProperty() {
     return property;
   }
@@ -87,7 +95,7 @@ public class Name implements Parcelable {
    * Get _123Number
    * @return _123Number
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Integer get123Number() {
     return _123Number;
   }
@@ -137,30 +145,22 @@ public class Name implements Parcelable {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
+
   public void writeToParcel(Parcel out, int flags) {
-     
     out.writeValue(name);
-
     out.writeValue(snakeCase);
-
     out.writeValue(property);
-
     out.writeValue(_123Number);
   }
 
-  public Name() {
-    super();
-  }
-
   Name(Parcel in) {
-    
     name = (Integer)in.readValue(null);
     snakeCase = (Integer)in.readValue(null);
     property = (String)in.readValue(null);
     _123Number = (Integer)in.readValue(null);
   }
-  
+
   public int describeContents() {
     return 0;
   }

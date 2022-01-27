@@ -3,17 +3,20 @@ package io.swagger.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class AdditionalPropertiesClass   {
+public class AdditionalPropertiesClass  implements Serializable {
   
-  private Map<String, String> mapProperty = new HashMap<String, String>();
-  private Map<String, Map<String, String>> mapOfMapProperty = new HashMap<String, Map<String, String>>();
+  private @Valid Map<String, String> mapProperty = new HashMap<String, String>();
+  private @Valid Map<String, Map<String, String>> mapOfMapProperty = new HashMap<String, Map<String, String>>();
 
   /**
    **/
@@ -23,7 +26,8 @@ public class AdditionalPropertiesClass   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("map_property")
   public Map<String, String> getMapProperty() {
     return mapProperty;
   }
@@ -39,7 +43,8 @@ public class AdditionalPropertiesClass   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("map_of_map_property")
   public Map<String, Map<String, String>> getMapOfMapProperty() {
     return mapOfMapProperty;
   }
@@ -49,7 +54,7 @@ public class AdditionalPropertiesClass   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -81,10 +86,11 @@ public class AdditionalPropertiesClass   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

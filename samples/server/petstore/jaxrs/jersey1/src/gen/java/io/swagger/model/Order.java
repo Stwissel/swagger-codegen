@@ -21,11 +21,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 /**
  * Order
  */
-
 public class Order   {
   @JsonProperty("id")
   private Long id = null;
@@ -83,10 +83,10 @@ public class Order   {
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   **/
   @JsonProperty("id")
   @ApiModelProperty(value = "")
   public Long getId() {
@@ -102,10 +102,10 @@ public class Order   {
     return this;
   }
 
-   /**
+  /**
    * Get petId
    * @return petId
-  **/
+   **/
   @JsonProperty("petId")
   @ApiModelProperty(value = "")
   public Long getPetId() {
@@ -121,10 +121,10 @@ public class Order   {
     return this;
   }
 
-   /**
+  /**
    * Get quantity
    * @return quantity
-  **/
+   **/
   @JsonProperty("quantity")
   @ApiModelProperty(value = "")
   public Integer getQuantity() {
@@ -140,12 +140,13 @@ public class Order   {
     return this;
   }
 
-   /**
+  /**
    * Get shipDate
    * @return shipDate
-  **/
+   **/
   @JsonProperty("shipDate")
   @ApiModelProperty(value = "")
+  @Valid
   public Date getShipDate() {
     return shipDate;
   }
@@ -159,10 +160,10 @@ public class Order   {
     return this;
   }
 
-   /**
+  /**
    * Order Status
    * @return status
-  **/
+   **/
   @JsonProperty("status")
   @ApiModelProperty(value = "Order Status")
   public StatusEnum getStatus() {
@@ -178,13 +179,13 @@ public class Order   {
     return this;
   }
 
-   /**
+  /**
    * Get complete
    * @return complete
-  **/
+   **/
   @JsonProperty("complete")
   @ApiModelProperty(value = "")
-  public Boolean getComplete() {
+  public Boolean isComplete() {
     return complete;
   }
 

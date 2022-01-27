@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 /**
  * Model for testing model name same as property name
  */
 @ApiModel(description = "Model for testing model name same as property name")
-
 public class Name   {
   @JsonProperty("name")
   private Integer name = null;
@@ -43,10 +43,10 @@ public class Name   {
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
+   **/
   @JsonProperty("name")
   @ApiModelProperty(required = true, value = "")
   @NotNull
@@ -58,10 +58,10 @@ public class Name   {
     this.name = name;
   }
 
-   /**
+  /**
    * Get snakeCase
    * @return snakeCase
-  **/
+   **/
   @JsonProperty("snake_case")
   @ApiModelProperty(value = "")
   public Integer getSnakeCase() {
@@ -73,10 +73,10 @@ public class Name   {
     return this;
   }
 
-   /**
+  /**
    * Get property
    * @return property
-  **/
+   **/
   @JsonProperty("property")
   @ApiModelProperty(value = "")
   public String getProperty() {
@@ -87,10 +87,10 @@ public class Name   {
     this.property = property;
   }
 
-   /**
+  /**
    * Get _123Number
    * @return _123Number
-  **/
+   **/
   @JsonProperty("123Number")
   @ApiModelProperty(value = "")
   public Integer get123Number() {

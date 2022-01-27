@@ -14,8 +14,10 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.client.model.Category;
@@ -38,10 +40,10 @@ public class Pet {
   private String name = null;
 
   @JsonProperty("photoUrls")
-  private List<String> photoUrls = new ArrayList<String>();
+  private List<String> photoUrls = new ArrayList<>();
 
   @JsonProperty("tags")
-  private List<Tag> tags = new ArrayList<Tag>();
+  private List<Tag> tags = null;
 
   /**
    * pet status in the store
@@ -59,15 +61,20 @@ public class Pet {
       this.value = value;
     }
 
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
     @Override
     public String toString() {
       return String.valueOf(value);
     }
 
     @JsonCreator
-    public static StatusEnum fromValue(String text) {
+    public static StatusEnum fromValue(String value) {
       for (StatusEnum b : StatusEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
+        if (b.value.equals(value)) {
           return b;
         }
       }
@@ -87,7 +94,7 @@ public class Pet {
    * Get id
    * @return id
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Long getId() {
     return id;
   }
@@ -105,7 +112,7 @@ public class Pet {
    * Get category
    * @return category
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Category getCategory() {
     return category;
   }
@@ -146,7 +153,7 @@ public class Pet {
    * Get photoUrls
    * @return photoUrls
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public List<String> getPhotoUrls() {
     return photoUrls;
   }
@@ -161,6 +168,9 @@ public class Pet {
   }
 
   public Pet addTagsItem(Tag tagsItem) {
+    if (this.tags == null) {
+      this.tags = new ArrayList<>();
+    }
     this.tags.add(tagsItem);
     return this;
   }
@@ -169,7 +179,7 @@ public class Pet {
    * Get tags
    * @return tags
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public List<Tag> getTags() {
     return tags;
   }
@@ -187,7 +197,7 @@ public class Pet {
    * pet status in the store
    * @return status
   **/
-  @ApiModelProperty(example = "null", value = "pet status in the store")
+  @ApiModelProperty(value = "pet status in the store")
   public StatusEnum getStatus() {
     return status;
   }
@@ -245,6 +255,6 @@ public class Pet {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
 }
 

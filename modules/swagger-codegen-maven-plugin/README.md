@@ -11,14 +11,14 @@ Add to your `build->plugins` section (default phase is `generate-sources` phase)
 <plugin>
     <groupId>io.swagger</groupId>
     <artifactId>swagger-codegen-maven-plugin</artifactId>
-    <version>2.2.2-SNAPSHOT</version>
+    <version>2.3.1</version>
     <executions>
         <execution>
             <goals>
                 <goal>generate</goal>
             </goals>
             <configuration>
-                <inputSpec>src/main/resources/api.yaml</inputSpec>
+                <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
                 <language>java</language>
                 <configOptions>
                    <sourceFolder>src/gen/java/main</sourceFolder>
@@ -46,10 +46,20 @@ mvn clean compile
 - `apiPackage` - the package to use for generated api objects/classes
 - `invokerPackage` - the package to use for the generated invoker objects
 - `modelNamePrefix` and `modelNameSuffix` - Sets the pre- or suffix for model classes and enums
-- `useJaxbAnnotations` - enable Jaxb annotations inside the generated models
+- `withXml` - enable XML annotations inside the generated models and API (only works with Java `language` and libraries that provide support for JSON and XML)
 - `configOptions` - a map of language-specific parameters (see below)
 - `configHelp` - dumps the configuration help for the specified library (generates no sources)
 - `ignoreFileOverride` - specifies the full path to a `.swagger-codegen-ignore` used for pattern based overrides of generated outputs
+- `generateApis` - generate the apis (`true` by default)
+- `generateApiTests` - generate the api tests (`true` by default. Only available if `generateApis` is `true`)
+- `generateApiDocumentation` - generate the api documentation (`true` by default. Only available if `generateApis` is `true`)
+- `generateModels` - generate the models (`true` by default)
+- `modelsToGenerate` - A comma separated list of models to generate.  All models is the default.
+- `generateModelTests` - generate the model tests (`true` by default. Only available if `generateModels` is `true`)
+- `generateModelDocumentation` - generate the model documentation (`true` by default. Only available if `generateModels` is `true`)
+- `generateSupportingFiles` - generate the supporting files (`true` by default)
+- `supportingFilesToGenerate` - A comma separated list of supporting files to generate.  All files is the default.
+- `skip` - skip code generation (`false` by default. Can also be set globally through the `codegen.skip` property)
 
 ### Custom Generator
 
@@ -66,7 +76,7 @@ Specifying a custom generator is a bit different. It doesn't support the classpa
                 <goal>generate</goal>
             </goals>
             <configuration>
-                <inputSpec>src/main/resources/yaml/yamlfilename.yaml</inputSpec>
+                <inputSpec>${project.basedir}/src/main/resources/yaml/yamlfilename.yaml</inputSpec>
                 <!-- language file, like e.g. JavaJaxRSCodegen shipped with swagger -->
                 <language>com.my.package.for.GeneratorLanguage</language>
                 <templateDirectory>myTemplateDir</templateDirectory>

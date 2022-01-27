@@ -14,11 +14,14 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 /**
  * User
@@ -58,7 +61,7 @@ public class User {
    * Get id
    * @return id
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Long getId() {
     return id;
   }
@@ -76,7 +79,7 @@ public class User {
    * Get username
    * @return username
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getUsername() {
     return username;
   }
@@ -94,7 +97,7 @@ public class User {
    * Get firstName
    * @return firstName
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getFirstName() {
     return firstName;
   }
@@ -112,7 +115,7 @@ public class User {
    * Get lastName
    * @return lastName
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getLastName() {
     return lastName;
   }
@@ -130,7 +133,7 @@ public class User {
    * Get email
    * @return email
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getEmail() {
     return email;
   }
@@ -148,7 +151,7 @@ public class User {
    * Get password
    * @return password
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getPassword() {
     return password;
   }
@@ -166,7 +169,7 @@ public class User {
    * Get phone
    * @return phone
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getPhone() {
     return phone;
   }
@@ -184,7 +187,7 @@ public class User {
    * User Status
    * @return userStatus
   **/
-  @ApiModelProperty(example = "null", value = "User Status")
+  @ApiModelProperty(value = "User Status")
   public Integer getUserStatus() {
     return userStatus;
   }
@@ -246,6 +249,6 @@ public class User {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
 }
 

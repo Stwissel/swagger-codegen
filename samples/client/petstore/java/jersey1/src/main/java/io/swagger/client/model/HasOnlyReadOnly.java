@@ -14,8 +14,10 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -34,7 +36,7 @@ public class HasOnlyReadOnly {
    * Get bar
    * @return bar
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getBar() {
     return bar;
   }
@@ -43,7 +45,7 @@ public class HasOnlyReadOnly {
    * Get foo
    * @return foo
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getFoo() {
     return foo;
   }
@@ -89,6 +91,6 @@ public class HasOnlyReadOnly {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
 }
 

@@ -1,15 +1,18 @@
 package io.swagger.model;
 
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class Client   {
+public class Client  implements Serializable {
   
-  private String client = null;
+  private @Valid String client = null;
 
   /**
    **/
@@ -19,7 +22,8 @@ public class Client   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("client")
   public String getClient() {
     return client;
   }
@@ -29,7 +33,7 @@ public class Client   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -59,10 +63,11 @@ public class Client   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

@@ -89,8 +89,8 @@ static NSString * SWG__fileNameForResponse(NSURLResponse *response) {
 #pragma mark - Task Methods
 
 - (NSURLSessionDataTask*) taskWithCompletionBlock: (NSURLRequest *)request completionBlock: (void (^)(id, NSError *))completionBlock {
-    
-    NSURLSessionDataTask *task = [self dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+
+    NSURLSessionDataTask *task = [self dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         SWGDebugLogResponse(response, responseObject,request,error);
         if(!error) {
             completionBlock(responseObject, nil);
@@ -104,7 +104,7 @@ static NSString * SWG__fileNameForResponse(NSURLResponse *response) {
         NSError *augmentedError = [error initWithDomain:error.domain code:error.code userInfo:userInfo];
         completionBlock(nil, augmentedError);
     }];
-    
+
     return task;
 }
 
@@ -112,7 +112,7 @@ static NSString * SWG__fileNameForResponse(NSURLResponse *response) {
 
     __block NSString * tempFolderPath = [self.configuration.tempFolderPath copy];
 
-    NSURLSessionDataTask* task = [self dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+    NSURLSessionDataTask* task = [self dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         SWGDebugLogResponse(response, responseObject,request,error);
 
         if(error) {
@@ -135,7 +135,7 @@ static NSString * SWG__fileNameForResponse(NSURLResponse *response) {
 
         completionBlock(file, nil);
     }];
-    
+
     return task;
 }
 
@@ -222,7 +222,7 @@ static NSString * SWG__fileNameForResponse(NSURLResponse *response) {
 
     [self postProcessRequest:request];
 
-    
+
     NSURLSessionTask *task = nil;
 
     if ([self.downloadTaskResponseTypes containsObject:responseType]) {
@@ -241,9 +241,9 @@ static NSString * SWG__fileNameForResponse(NSURLResponse *response) {
             completionBlock(response, error);
         }];
     }
-    
+
     [task resume];
-    
+
     return task;
 }
 
@@ -330,7 +330,7 @@ static NSString * SWG__fileNameForResponse(NSURLResponse *response) {
 
     NSMutableDictionary *headersWithAuth = [NSMutableDictionary dictionaryWithDictionary:*headers];
     NSMutableDictionary *querysWithAuth = [NSMutableDictionary dictionaryWithDictionary:*querys];
-    
+
     id<SWGConfiguration> config = self.configuration;
     for (NSString *auth in authSettings) {
         NSDictionary *authSetting = config.authSettings[auth];

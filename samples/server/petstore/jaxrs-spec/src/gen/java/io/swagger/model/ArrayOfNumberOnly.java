@@ -3,16 +3,19 @@ package io.swagger.model;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class ArrayOfNumberOnly   {
+public class ArrayOfNumberOnly  implements Serializable {
   
-  private List<BigDecimal> arrayNumber = new ArrayList<BigDecimal>();
+  private @Valid List<BigDecimal> arrayNumber = new ArrayList<BigDecimal>();
 
   /**
    **/
@@ -22,7 +25,8 @@ public class ArrayOfNumberOnly   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("ArrayNumber")
   public List<BigDecimal> getArrayNumber() {
     return arrayNumber;
   }
@@ -32,7 +36,7 @@ public class ArrayOfNumberOnly   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -62,10 +66,11 @@ public class ArrayOfNumberOnly   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

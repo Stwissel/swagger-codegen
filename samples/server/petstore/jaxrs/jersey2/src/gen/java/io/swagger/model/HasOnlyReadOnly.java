@@ -19,11 +19,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 /**
  * HasOnlyReadOnly
  */
-
 public class HasOnlyReadOnly   {
   @JsonProperty("bar")
   private String bar = null;
@@ -31,20 +31,20 @@ public class HasOnlyReadOnly   {
   @JsonProperty("foo")
   private String foo = null;
 
-   /**
+  /**
    * Get bar
    * @return bar
-  **/
+   **/
   @JsonProperty("bar")
   @ApiModelProperty(value = "")
   public String getBar() {
     return bar;
   }
 
-   /**
+  /**
    * Get foo
    * @return foo
-  **/
+   **/
   @JsonProperty("foo")
   @ApiModelProperty(value = "")
   public String getFoo() {

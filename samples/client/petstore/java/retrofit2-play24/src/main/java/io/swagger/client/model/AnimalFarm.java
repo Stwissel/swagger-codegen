@@ -14,10 +14,12 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
 import io.swagger.client.model.Animal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 /**
  * AnimalFarm
@@ -61,6 +63,6 @@ public class AnimalFarm extends ArrayList<Animal> {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
 }
 

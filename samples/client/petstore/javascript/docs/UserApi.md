@@ -1,6 +1,6 @@
 # SwaggerPetstore.UserApi
 
-All URIs are relative to *http://petstore.swagger.io/v2*
+All URIs are relative to *http://petstore.swagger.io:80/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -212,7 +212,7 @@ var SwaggerPetstore = require('swagger_petstore');
 
 var apiInstance = new SwaggerPetstore.UserApi();
 
-var username = "username_example"; // String | The name that needs to be fetched. Use user1 for testing. 
+var username = "username_example"; // String | The name that needs to be fetched. Use user1 for testing.
 
 
 var callback = function(error, data, response) {
@@ -229,7 +229,7 @@ apiInstance.getUserByName(username, callback);
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **username** | **String**| The name that needs to be fetched. Use user1 for testing.  | 
+ **username** | **String**| The name that needs to be fetched. Use user1 for testing. | 
 
 ### Return type
 
@@ -246,7 +246,7 @@ No authorization required
 
 <a name="loginUser"></a>
 # **loginUser**
-> &#39;String&#39; loginUser(username, password)
+> 'String' loginUser(username, password)
 
 Logs user into the system
 
@@ -282,7 +282,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**&#39;String&#39;**
+**'String'**
 
 ### Authorization
 

@@ -65,7 +65,7 @@
 
     {{#hasConsumes}}
     <h3 class="field-label">Consumes</h3>
-    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
     <ul>
     {{#consumes}}
       <li><code>{{{mediaType}}}</code></li>
@@ -83,7 +83,7 @@
     {{#hasHeaderParams}}
     <h3 class="field-label">Request headers</h3>
     <div class="field-items">
-      {{#headerParam}}{{>headerParam}}{{/headerParam}}
+      {{#headerParams}}{{>headerParam}}{{/headerParams}}
     </div>  <!-- field-items -->
     {{/hasHeaderParams}}
 
@@ -122,7 +122,7 @@
     {{#hasProduces}}
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
-    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
     <ul>
     {{#produces}}
       <li><code>{{{mediaType}}}</code></li>
@@ -148,7 +148,6 @@
   {{/apis}}
   {{/apiInfo}}
 
-  <div class="up"><a href="#__Models">Up</a></div>
   <h2><a name="__Models">Models</a></h2>
   [ Jump to <a href="#__Methods">Methods</a> ]
 
@@ -156,7 +155,7 @@
   <ol>
   {{#models}}
   {{#model}}
-    <li><a href="#{{name}}"><code>{{name}}</code></a></li>
+    <li><a href="#{{name}}"><code>{{name}}</code>{{#title}} - {{title}}{{/title}}</a></li>
   {{/model}}
   {{/models}}
   </ol>
@@ -164,14 +163,17 @@
   {{#models}}
   {{#model}}
   <div class="model">
-    <h3 class="field-label"><a name="{{name}}">{{name}} - {{title}}</a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'>{{unescapedDescription}}</div>
+    <h3><a name="{{name}}"><code>{{name}}</code>{{#title}} - {{title}}{{/title}}</a> <a class="up" href="#__Models">Up</a></h3>
+    {{#unescapedDescription}}<div class='model-description'>{{unescapedDescription}}</div>{{/unescapedDescription}}
     <div class="field-items">
       {{#vars}}<div class="param">{{name}} {{^required}}(optional){{/required}}</div><div class="param-desc"><span class="param-type">{{^isPrimitiveType}}<a href="#{{complexType}}">{{datatype}}</a>{{/isPrimitiveType}}</span> {{unescapedDescription}} {{#dataFormat}}format: {{{dataFormat}}}{{/dataFormat}}</div>
       {{#isEnum}}
         <div class="param-enum-header">Enum:</div>
         {{#_enum}}<div class="param-enum">{{this}}</div>{{/_enum}}
       {{/isEnum}}
+      {{#example}}
+          <div class="param-desc"><span class="param-type">example: {{example}}</span></div>
+      {{/example}}
       {{/vars}}
     </div>  <!-- field-items -->
   </div>

@@ -20,11 +20,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.model.Animal;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 /**
  * Cat
  */
-
 public class Cat extends Animal  {
   @JsonProperty("declawed")
   private Boolean declawed = null;
@@ -34,13 +34,13 @@ public class Cat extends Animal  {
     return this;
   }
 
-   /**
+  /**
    * Get declawed
    * @return declawed
-  **/
+   **/
   @JsonProperty("declawed")
   @ApiModelProperty(value = "")
-  public Boolean getDeclawed() {
+  public Boolean isDeclawed() {
     return declawed;
   }
 

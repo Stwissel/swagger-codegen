@@ -7,6 +7,7 @@ import io.swagger.client.model.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 import org.junit.*;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static org.junit.Assert.*;
@@ -191,7 +193,7 @@ public class PetApiTest {
 
     @Test
     public void testUploadFile() throws Exception {
-        File file = File.createTempFile("test", "hello.txt");
+        File file = Files.createTempFile("test", "hello.txt").toFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
         writer.write("Hello world!");
@@ -200,8 +202,8 @@ public class PetApiTest {
         Pet pet = createRandomPet();
         api.addPet(pet).subscribe(SkeletonSubscriber.failTestOnError());
 
-        RequestBody body = RequestBody.create(MediaType.parse("text/plain"), file);
-        api.uploadFile(pet.getId(), "a test file", body).subscribe(new SkeletonSubscriber<ModelApiResponse>() {
+        final RequestBody body = RequestBody.create(MediaType.parse("text/plain"), file);
+        api.uploadFile(pet.getId(), "a test file", MultipartBody.Part.createFormData("datafile", file.getName(), body)).subscribe(new SkeletonSubscriber<ModelApiResponse>() {
             @Override
             public void onError(Throwable e) {
                 // this also yields a 400 for other tests, so I guess it's okay...

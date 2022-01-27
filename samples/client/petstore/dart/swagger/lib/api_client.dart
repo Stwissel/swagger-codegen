@@ -10,13 +10,10 @@ class QueryParam {
 class ApiClient {
 
   String basePath;
-  var client = new BrowserClient();
+  var client = new Client();
 
   Map<String, String> _defaultHeaderMap = {};
   Map<String, Authentication> _authentications = {};
-
-  final dson = new Dartson.JSON()
-                   ..addTransformer(new DateTimeParser(), DateTime);
 
   final _RegList = new RegExp(r'^List<(.*)>$');
   final _RegMap = new RegExp(r'^Map<String,(.*)>$');
@@ -42,18 +39,22 @@ class ApiClient {
           return value is bool ? value : '$value'.toLowerCase() == 'true';
         case 'double':
           return value is double ? value : double.parse('$value');
+        case 'Amount':
+          return new Amount.fromJson(value);
         case 'ApiResponse':
-          return dson.map(value, new ApiResponse());
+          return new ApiResponse.fromJson(value);
         case 'Category':
-          return dson.map(value, new Category());
+          return new Category.fromJson(value);
+        case 'Currency':
+          return new Currency.fromJson(value);
         case 'Order':
-          return dson.map(value, new Order());
+          return new Order.fromJson(value);
         case 'Pet':
-          return dson.map(value, new Pet());
+          return new Pet.fromJson(value);
         case 'Tag':
-          return dson.map(value, new Tag());
+          return new Tag.fromJson(value);
         case 'User':
-          return dson.map(value, new User());
+          return new User.fromJson(value);
         default:
           {
             Match match;
@@ -75,13 +76,13 @@ class ApiClient {
     throw new ApiException(500, 'Could not find a suitable class for deserialization');
   }
 
-  dynamic deserialize(String json, String targetType) {
+  dynamic deserialize(String jsonVal, String targetType) {
     // Remove all spaces.  Necessary for reg expressions as well.
     targetType = targetType.replaceAll(' ', '');
 
-    if (targetType == 'String') return json;
+    if (targetType == 'String') return jsonVal;
 
-    var decodedJson = JSON.decode(json);
+    var decodedJson = json.decode(jsonVal);
     return _deserialize(decodedJson, targetType);
   }
 
@@ -89,10 +90,8 @@ class ApiClient {
     String serialized = '';
     if (obj == null) {
       serialized = '';
-    } else if (obj is String) {
-      serialized = obj;
     } else {
-      serialized = dson.encode(obj);
+      serialized = json.encode(obj);
     }
     return serialized;
   }
@@ -121,7 +120,7 @@ class ApiClient {
     headerParams['Content-Type'] = contentType;
 
     if(body is MultipartRequest) {
-      var request = new MultipartRequest(method, Uri.parse(url));      
+      var request = new MultipartRequest(method, Uri.parse(url));
       request.fields.addAll(body.fields);
       request.files.addAll(body.files);
       request.headers.addAll(body.headers);
@@ -146,12 +145,20 @@ class ApiClient {
   }
 
   /// Update query and header parameters based on authentication settings.
-  /// @param authNames The authentications to apply  
+  /// @param authNames The authentications to apply
   void _updateParamsForAuth(List<String> authNames, List<QueryParam> queryParams, Map<String, String> headerParams) {
     authNames.forEach((authName) {
       Authentication auth = _authentications[authName];
       if (auth == null) throw new ArgumentError("Authentication undefined: " + authName);
       auth.applyToParams(queryParams, headerParams);
+    });
+  }
+
+  void setAccessToken(String accessToken) {
+    _authentications.forEach((key, auth) {
+      if (auth is OAuth) {
+        auth.setAccessToken(accessToken);
+      }
     });
   }
 }

@@ -22,6 +22,7 @@ using Newtonsoft.Json.Converters;
 using PropertyChanged;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using SwaggerDateConverter = IO.Swagger.Client.SwaggerDateConverter;
 
 namespace IO.Swagger.Model
 {
@@ -35,10 +36,10 @@ namespace IO.Swagger.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="ReadOnlyFirst" /> class.
         /// </summary>
-        /// <param name="Baz">Baz.</param>
-        public ReadOnlyFirst(string Baz = default(string))
+        /// <param name="baz">baz.</param>
+        public ReadOnlyFirst(string baz = default(string))
         {
-            this.Baz = Baz;
+            this.Baz = baz;
         }
         
         /// <summary>
@@ -46,11 +47,13 @@ namespace IO.Swagger.Model
         /// </summary>
         [DataMember(Name="bar", EmitDefaultValue=false)]
         public string Bar { get; private set; }
+
         /// <summary>
         /// Gets or Sets Baz
         /// </summary>
         [DataMember(Name="baz", EmitDefaultValue=false)]
         public string Baz { get; set; }
+
         /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
@@ -69,7 +72,7 @@ namespace IO.Swagger.Model
         /// Returns the JSON string presentation of the object
         /// </summary>
         /// <returns>JSON string presentation of the object</returns>
-        public string ToJson()
+        public virtual string ToJson()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
@@ -77,35 +80,33 @@ namespace IO.Swagger.Model
         /// <summary>
         /// Returns true if objects are equal
         /// </summary>
-        /// <param name="obj">Object to be compared</param>
+        /// <param name="input">Object to be compared</param>
         /// <returns>Boolean</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object input)
         {
-            // credit: http://stackoverflow.com/a/10454552/677735
-            return this.Equals(obj as ReadOnlyFirst);
+            return this.Equals(input as ReadOnlyFirst);
         }
 
         /// <summary>
         /// Returns true if ReadOnlyFirst instances are equal
         /// </summary>
-        /// <param name="other">Instance of ReadOnlyFirst to be compared</param>
+        /// <param name="input">Instance of ReadOnlyFirst to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(ReadOnlyFirst other)
+        public bool Equals(ReadOnlyFirst input)
         {
-            // credit: http://stackoverflow.com/a/10454552/677735
-            if (other == null)
+            if (input == null)
                 return false;
 
             return 
                 (
-                    this.Bar == other.Bar ||
-                    this.Bar != null &&
-                    this.Bar.Equals(other.Bar)
+                    this.Bar == input.Bar ||
+                    (this.Bar != null &&
+                    this.Bar.Equals(input.Bar))
                 ) && 
                 (
-                    this.Baz == other.Baz ||
-                    this.Baz != null &&
-                    this.Baz.Equals(other.Baz)
+                    this.Baz == input.Baz ||
+                    (this.Baz != null &&
+                    this.Baz.Equals(input.Baz))
                 );
         }
 
@@ -115,21 +116,26 @@ namespace IO.Swagger.Model
         /// <returns>Hash code</returns>
         public override int GetHashCode()
         {
-            // credit: http://stackoverflow.com/a/263416/677735
             unchecked // Overflow is fine, just wrap
             {
-                int hash = 41;
-                // Suitable nullity checks etc, of course :)
+                int hashCode = 41;
                 if (this.Bar != null)
-                    hash = hash * 59 + this.Bar.GetHashCode();
+                    hashCode = hashCode * 59 + this.Bar.GetHashCode();
                 if (this.Baz != null)
-                    hash = hash * 59 + this.Baz.GetHashCode();
-                return hash;
+                    hashCode = hashCode * 59 + this.Baz.GetHashCode();
+                return hashCode;
             }
         }
 
+        /// <summary>
+        /// Property changed event handler
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Trigger when a property changed
+        /// </summary>
+        /// <param name="propertyName">Property Name</param>
         public virtual void OnPropertyChanged(string propertyName)
         {
             // NOTE: property changed is handled via "code weaving" using Fody.
@@ -141,8 +147,13 @@ namespace IO.Swagger.Model
             }
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        { 
+        /// <summary>
+        /// To validate all properties of the instance
+        /// </summary>
+        /// <param name="validationContext">Validation context</param>
+        /// <returns>Validation Result</returns>
+        IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
             yield break;
         }
     }

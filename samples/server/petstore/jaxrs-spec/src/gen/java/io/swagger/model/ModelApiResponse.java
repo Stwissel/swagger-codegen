@@ -1,17 +1,20 @@
 package io.swagger.model;
 
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class ModelApiResponse   {
+public class ModelApiResponse  implements Serializable {
   
-  private Integer code = null;
-  private String type = null;
-  private String message = null;
+  private @Valid Integer code = null;
+  private @Valid String type = null;
+  private @Valid String message = null;
 
   /**
    **/
@@ -21,7 +24,8 @@ public class ModelApiResponse   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("code")
   public Integer getCode() {
     return code;
   }
@@ -37,7 +41,8 @@ public class ModelApiResponse   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("type")
   public String getType() {
     return type;
   }
@@ -53,7 +58,8 @@ public class ModelApiResponse   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("message")
   public String getMessage() {
     return message;
   }
@@ -63,7 +69,7 @@ public class ModelApiResponse   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -97,10 +103,11 @@ public class ModelApiResponse   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

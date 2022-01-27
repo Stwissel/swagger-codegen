@@ -1,6 +1,8 @@
 package io.swagger.model;
 
 import io.swagger.annotations.ApiModel;
+import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 import io.swagger.annotations.ApiModelProperty;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,107 +12,184 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+  * A User who is purchasing from the pet store
+ **/
 @ApiModel(description="A User who is purchasing from the pet store")
 public class User  {
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   private Long id = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String username = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String firstName = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String lastName = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String email = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String password = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String phone = null;
-  @ApiModelProperty(example = "null", value = "User Status")
-  private Integer userStatus = null;
 
+  @ApiModelProperty(value = "")
+  private String username = null;
+
+  @ApiModelProperty(value = "")
+  private String firstName = null;
+
+  @ApiModelProperty(value = "")
+  private String lastName = null;
+
+  @ApiModelProperty(value = "")
+  private String email = null;
+
+  @ApiModelProperty(value = "")
+  private String password = null;
+
+  @ApiModelProperty(value = "")
+  private String phone = null;
+
+  @ApiModelProperty(value = "User Status")
+ /**
+   * User Status
+  **/
+  private Integer userStatus = null;
  /**
    * Get id
    * @return id
   **/
+  @JsonProperty("id")
   public Long getId() {
     return id;
   }
+
   public void setId(Long id) {
     this.id = id;
   }
+
+  public User id(Long id) {
+    this.id = id;
+    return this;
+  }
+
  /**
    * Get username
    * @return username
   **/
+  @JsonProperty("username")
   public String getUsername() {
     return username;
   }
+
   public void setUsername(String username) {
     this.username = username;
   }
+
+  public User username(String username) {
+    this.username = username;
+    return this;
+  }
+
  /**
    * Get firstName
    * @return firstName
   **/
+  @JsonProperty("firstName")
   public String getFirstName() {
     return firstName;
   }
+
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
+
+  public User firstName(String firstName) {
+    this.firstName = firstName;
+    return this;
+  }
+
  /**
    * Get lastName
    * @return lastName
   **/
+  @JsonProperty("lastName")
   public String getLastName() {
     return lastName;
   }
+
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
+
+  public User lastName(String lastName) {
+    this.lastName = lastName;
+    return this;
+  }
+
  /**
    * Get email
    * @return email
   **/
+  @JsonProperty("email")
   public String getEmail() {
     return email;
   }
+
   public void setEmail(String email) {
     this.email = email;
   }
+
+  public User email(String email) {
+    this.email = email;
+    return this;
+  }
+
  /**
    * Get password
    * @return password
   **/
+  @JsonProperty("password")
   public String getPassword() {
     return password;
   }
+
   public void setPassword(String password) {
     this.password = password;
   }
+
+  public User password(String password) {
+    this.password = password;
+    return this;
+  }
+
  /**
    * Get phone
    * @return phone
   **/
+  @JsonProperty("phone")
   public String getPhone() {
     return phone;
   }
+
   public void setPhone(String phone) {
     this.phone = phone;
   }
+
+  public User phone(String phone) {
+    this.phone = phone;
+    return this;
+  }
+
  /**
    * User Status
    * @return userStatus
   **/
+  @JsonProperty("userStatus")
   public Integer getUserStatus() {
     return userStatus;
   }
+
   public void setUserStatus(Integer userStatus) {
     this.userStatus = userStatus;
   }
+
+  public User userStatus(Integer userStatus) {
+    this.userStatus = userStatus;
+    return this;
+  }
+
 
   @Override
   public String toString() {
@@ -133,7 +212,7 @@ public class User  {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private static String toIndentedString(Object o) {
+  private static String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

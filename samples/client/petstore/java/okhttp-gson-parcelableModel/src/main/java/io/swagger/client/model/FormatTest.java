@@ -14,12 +14,19 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
 import java.math.BigDecimal;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.util.UUID;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.OffsetDateTime;
 import android.os.Parcelable;
 import android.os.Parcel;
 
@@ -59,14 +66,16 @@ public class FormatTest implements Parcelable {
   private LocalDate date = null;
 
   @SerializedName("dateTime")
-  private DateTime dateTime = null;
+  private OffsetDateTime dateTime = null;
 
   @SerializedName("uuid")
-  private String uuid = null;
+  private UUID uuid = null;
 
   @SerializedName("password")
   private String password = null;
 
+  public FormatTest() {
+  }
   public FormatTest integer(Integer integer) {
     this.integer = integer;
     return this;
@@ -78,7 +87,7 @@ public class FormatTest implements Parcelable {
    * maximum: 100
    * @return integer
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Integer getInteger() {
     return integer;
   }
@@ -98,7 +107,7 @@ public class FormatTest implements Parcelable {
    * maximum: 200
    * @return int32
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Integer getInt32() {
     return int32;
   }
@@ -116,7 +125,7 @@ public class FormatTest implements Parcelable {
    * Get int64
    * @return int64
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Long getInt64() {
     return int64;
   }
@@ -136,7 +145,7 @@ public class FormatTest implements Parcelable {
    * maximum: 543.2
    * @return number
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public BigDecimal getNumber() {
     return number;
   }
@@ -156,7 +165,7 @@ public class FormatTest implements Parcelable {
    * maximum: 987.6
    * @return _float
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Float getFloat() {
     return _float;
   }
@@ -176,7 +185,7 @@ public class FormatTest implements Parcelable {
    * maximum: 123.4
    * @return _double
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Double getDouble() {
     return _double;
   }
@@ -194,7 +203,7 @@ public class FormatTest implements Parcelable {
    * Get string
    * @return string
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getString() {
     return string;
   }
@@ -212,7 +221,7 @@ public class FormatTest implements Parcelable {
    * Get _byte
    * @return _byte
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public byte[] getByte() {
     return _byte;
   }
@@ -230,7 +239,7 @@ public class FormatTest implements Parcelable {
    * Get binary
    * @return binary
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public byte[] getBinary() {
     return binary;
   }
@@ -248,7 +257,7 @@ public class FormatTest implements Parcelable {
    * Get date
    * @return date
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public LocalDate getDate() {
     return date;
   }
@@ -257,7 +266,7 @@ public class FormatTest implements Parcelable {
     this.date = date;
   }
 
-  public FormatTest dateTime(DateTime dateTime) {
+  public FormatTest dateTime(OffsetDateTime dateTime) {
     this.dateTime = dateTime;
     return this;
   }
@@ -266,16 +275,16 @@ public class FormatTest implements Parcelable {
    * Get dateTime
    * @return dateTime
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public DateTime getDateTime() {
+  @ApiModelProperty(value = "")
+  public OffsetDateTime getDateTime() {
     return dateTime;
   }
 
-  public void setDateTime(DateTime dateTime) {
+  public void setDateTime(OffsetDateTime dateTime) {
     this.dateTime = dateTime;
   }
 
-  public FormatTest uuid(String uuid) {
+  public FormatTest uuid(UUID uuid) {
     this.uuid = uuid;
     return this;
   }
@@ -284,12 +293,12 @@ public class FormatTest implements Parcelable {
    * Get uuid
    * @return uuid
   **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getUuid() {
+  @ApiModelProperty(value = "")
+  public UUID getUuid() {
     return uuid;
   }
 
-  public void setUuid(String uuid) {
+  public void setUuid(UUID uuid) {
     this.uuid = uuid;
   }
 
@@ -302,7 +311,7 @@ public class FormatTest implements Parcelable {
    * Get password
    * @return password
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public String getPassword() {
     return password;
   }
@@ -328,8 +337,8 @@ public class FormatTest implements Parcelable {
         Objects.equals(this._float, formatTest._float) &&
         Objects.equals(this._double, formatTest._double) &&
         Objects.equals(this.string, formatTest.string) &&
-        Objects.equals(this._byte, formatTest._byte) &&
-        Objects.equals(this.binary, formatTest.binary) &&
+        Arrays.equals(this._byte, formatTest._byte) &&
+        Arrays.equals(this.binary, formatTest.binary) &&
         Objects.equals(this.date, formatTest.date) &&
         Objects.equals(this.dateTime, formatTest.dateTime) &&
         Objects.equals(this.uuid, formatTest.uuid) &&
@@ -338,7 +347,7 @@ public class FormatTest implements Parcelable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(integer, int32, int64, number, _float, _double, string, _byte, binary, date, dateTime, uuid, password);
+    return Objects.hash(integer, int32, int64, number, _float, _double, string, Arrays.hashCode(_byte), Arrays.hashCode(binary), date, dateTime, uuid, password);
   }
 
 
@@ -374,57 +383,40 @@ public class FormatTest implements Parcelable {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
+
   public void writeToParcel(Parcel out, int flags) {
-     
     out.writeValue(integer);
-
     out.writeValue(int32);
-
     out.writeValue(int64);
-
     out.writeValue(number);
-
     out.writeValue(_float);
-
     out.writeValue(_double);
-
     out.writeValue(string);
-
     out.writeValue(_byte);
-
     out.writeValue(binary);
-
     out.writeValue(date);
-
     out.writeValue(dateTime);
-
     out.writeValue(uuid);
-
     out.writeValue(password);
   }
 
-  public FormatTest() {
-    super();
-  }
-
   FormatTest(Parcel in) {
-    
     integer = (Integer)in.readValue(null);
     int32 = (Integer)in.readValue(null);
     int64 = (Long)in.readValue(null);
-    number = (BigDecimal)in.readValue(null);
+    number = (BigDecimal)in.readValue(BigDecimal.class.getClassLoader());
     _float = (Float)in.readValue(null);
     _double = (Double)in.readValue(null);
     string = (String)in.readValue(null);
     _byte = (byte[])in.readValue(null);
     binary = (byte[])in.readValue(null);
-    date = (LocalDate)in.readValue(null);
-    dateTime = (DateTime)in.readValue(null);
-    uuid = (String)in.readValue(null);
+    date = (LocalDate)in.readValue(LocalDate.class.getClassLoader());
+    dateTime = (OffsetDateTime)in.readValue(OffsetDateTime.class.getClassLoader());
+    uuid = (UUID)in.readValue(UUID.class.getClassLoader());
     password = (String)in.readValue(null);
   }
-  
+
   public int describeContents() {
     return 0;
   }
