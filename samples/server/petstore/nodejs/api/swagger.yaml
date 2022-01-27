@@ -11,7 +11,7 @@ info:
   contact:
     email: "apiteam@swagger.io"
   license:
-    name: "Apache 2.0"
+    name: "Apache-2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "petstore.swagger.io"
 basePath: "/v2"
@@ -29,7 +29,7 @@ tags:
     description: "Find out more about our store"
     url: "http://swagger.io"
 schemes:
-- "http"
+- "https"
 paths:
   /pet:
     post:
@@ -52,7 +52,7 @@ paths:
         schema:
           $ref: "#/definitions/Pet"
       responses:
-        405:
+        "405":
           description: "Invalid input"
       security:
       - petstore_auth:
@@ -79,11 +79,11 @@ paths:
         schema:
           $ref: "#/definitions/Pet"
       responses:
-        400:
+        "400":
           description: "Invalid ID supplied"
-        404:
+        "404":
           description: "Pet not found"
-        405:
+        "405":
           description: "Validation exception"
       security:
       - petstore_auth:
@@ -108,20 +108,20 @@ paths:
         type: "array"
         items:
           type: "string"
-          default: "available"
           enum:
           - "available"
           - "pending"
           - "sold"
+          default: "available"
         collectionFormat: "csv"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Pet"
-        400:
+        "400":
           description: "Invalid status value"
       security:
       - petstore_auth:
@@ -149,18 +149,19 @@ paths:
           type: "string"
         collectionFormat: "csv"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Pet"
-        400:
+        "400":
           description: "Invalid tag value"
       security:
       - petstore_auth:
         - "write:pets"
         - "read:pets"
+      deprecated: true
       x-swagger-router-controller: "Pet"
   /pet/{petId}:
     get:
@@ -180,13 +181,13 @@ paths:
         type: "integer"
         format: "int64"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             $ref: "#/definitions/Pet"
-        400:
+        "400":
           description: "Invalid ID supplied"
-        404:
+        "404":
           description: "Pet not found"
       security:
       - api_key: []
@@ -220,7 +221,7 @@ paths:
         required: false
         type: "string"
       responses:
-        405:
+        "405":
           description: "Invalid input"
       security:
       - petstore_auth:
@@ -248,7 +249,7 @@ paths:
         type: "integer"
         format: "int64"
       responses:
-        400:
+        "400":
           description: "Invalid pet value"
       security:
       - petstore_auth:
@@ -284,7 +285,7 @@ paths:
         required: false
         type: "file"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             $ref: "#/definitions/ApiResponse"
@@ -304,7 +305,7 @@ paths:
       - "application/json"
       parameters: []
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             type: "object"
@@ -332,11 +333,11 @@ paths:
         schema:
           $ref: "#/definitions/Order"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             $ref: "#/definitions/Order"
-        400:
+        "400":
           description: "Invalid Order"
       x-swagger-router-controller: "Store"
   /store/order/{orderId}:
@@ -356,17 +357,17 @@ paths:
         description: "ID of pet that needs to be fetched"
         required: true
         type: "integer"
-        maximum: 5.0
-        minimum: 1.0
+        maximum: 5
+        minimum: 1
         format: "int64"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             $ref: "#/definitions/Order"
-        400:
+        "400":
           description: "Invalid ID supplied"
-        404:
+        "404":
           description: "Order not found"
       x-swagger-router-controller: "Store"
     delete:
@@ -386,9 +387,9 @@ paths:
         required: true
         type: "string"
       responses:
-        400:
+        "400":
           description: "Invalid ID supplied"
-        404:
+        "404":
           description: "Order not found"
       x-swagger-router-controller: "Store"
   /user:
@@ -480,10 +481,8 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
+        "200":
           description: "successful operation"
-          schema:
-            type: "string"
           headers:
             X-Rate-Limit:
               type: "integer"
@@ -493,7 +492,9 @@ paths:
               type: "string"
               format: "date-time"
               description: "date in UTC when toekn expires"
-        400:
+          schema:
+            type: "string"
+        "400":
           description: "Invalid username/password supplied"
       x-swagger-router-controller: "User"
   /user/logout:
@@ -524,17 +525,17 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "The name that needs to be fetched. Use user1 for testing. "
+        description: "The name that needs to be fetched. Use user1 for testing."
         required: true
         type: "string"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             $ref: "#/definitions/User"
-        400:
+        "400":
           description: "Invalid username supplied"
-        404:
+        "404":
           description: "User not found"
       x-swagger-router-controller: "User"
     put:
@@ -559,9 +560,9 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
-        400:
+        "400":
           description: "Invalid user supplied"
-        404:
+        "404":
           description: "User not found"
       x-swagger-router-controller: "User"
     delete:
@@ -580,16 +581,12 @@ paths:
         required: true
         type: "string"
       responses:
-        400:
+        "400":
           description: "Invalid username supplied"
-        404:
+        "404":
           description: "User not found"
       x-swagger-router-controller: "User"
 securityDefinitions:
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
   petstore_auth:
     type: "oauth2"
     authorizationUrl: "http://petstore.swagger.io/api/oauth/dialog"
@@ -597,6 +594,10 @@ securityDefinitions:
     scopes:
       write:pets: "modify pets in your account"
       read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
 definitions:
   Order:
     type: "object"
@@ -624,9 +625,16 @@ definitions:
         type: "boolean"
         default: false
     title: "Pet Order"
-    description: "An order for a pets from the pet store"
     xml:
       name: "Order"
+    description: "An order for a pets from the pet store"
+    example:
+      petId: 6
+      quantity: 1
+      id: 0
+      shipDate: "2000-01-23T04:56:07.000+00:00"
+      complete: false
+      status: "placed"
   Category:
     type: "object"
     properties:
@@ -635,10 +643,13 @@ definitions:
         format: "int64"
       name:
         type: "string"
-    title: "Pet catehgry"
-    description: "A category for a pet"
+    title: "Pet category"
     xml:
       name: "Category"
+    description: "A category for a pet"
+    example:
+      name: "name"
+      id: 6
   User:
     type: "object"
     properties:
@@ -662,9 +673,18 @@ definitions:
         format: "int32"
         description: "User Status"
     title: "a User"
-    description: "A User who is purchasing from the pet store"
     xml:
       name: "User"
+    description: "A User who is purchasing from the pet store"
+    example:
+      firstName: "firstName"
+      lastName: "lastName"
+      password: "password"
+      userStatus: 6
+      phone: "phone"
+      id: 0
+      email: "email"
+      username: "username"
   Tag:
     type: "object"
     properties:
@@ -674,9 +694,12 @@ definitions:
       name:
         type: "string"
     title: "Pet Tag"
-    description: "A tag for a pet"
     xml:
       name: "Tag"
+    description: "A tag for a pet"
+    example:
+      name: "name"
+      id: 1
   Pet:
     type: "object"
     required:
@@ -713,9 +736,24 @@ definitions:
         - "pending"
         - "sold"
     title: "a Pet"
-    description: "A pet for sale in the pet store"
     xml:
       name: "Pet"
+    description: "A pet for sale in the pet store"
+    example:
+      photoUrls:
+      - "photoUrls"
+      - "photoUrls"
+      name: "doggie"
+      id: 0
+      category:
+        name: "name"
+        id: 6
+      tags:
+      - name: "name"
+        id: 1
+      - name: "name"
+        id: 1
+      status: "available"
   ApiResponse:
     type: "object"
     properties:
@@ -728,6 +766,29 @@ definitions:
         type: "string"
     title: "An uploaded response"
     description: "Describes the result of uploading an image resource"
+    example:
+      code: 0
+      type: "type"
+      message: "message"
+  Amount:
+    type: "object"
+    required:
+    - "currency"
+    - "value"
+    properties:
+      value:
+        type: "number"
+        format: "double"
+        description: "some description\n"
+        minimum: 0.01
+        maximum: 1000000000000000
+      currency:
+        $ref: "#/definitions/Currency"
+    description: "some description\n"
+  Currency:
+    type: "string"
+    pattern: "^[A-Z]{3,3}$"
+    description: "some description\n"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

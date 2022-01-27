@@ -9,12 +9,14 @@ import io.swagger.codegen.languages.JavaClientCodegen;
 import io.swagger.models.Swagger;
 import io.swagger.models.auth.AuthorizationValue;
 import io.swagger.parser.SwaggerParser;
+import io.swagger.parser.util.ParseOptions;
 import mockit.Expectations;
 import mockit.FullVerifications;
 import mockit.Injectable;
 import mockit.Mocked;
 import mockit.StrictExpectations;
 import mockit.Tested;
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import java.nio.file.Paths;
@@ -42,6 +44,9 @@ public class CodegenConfiguratorTest {
 
     @Injectable
     List<AuthorizationValue> authorizationValues;
+
+    @Mocked
+    ParseOptions options;
 
     @Tested
     CodegenConfigurator configurator;
@@ -157,14 +162,12 @@ public class CodegenConfiguratorTest {
 
         configurator.addAdditionalProperty("foo", "bar")
                 .addAdditionalProperty("hello", "world")
-                .addAdditionalProperty("supportJava6", false)
                 .addAdditionalProperty("useRxJava", true);
 
         final ClientOptInput clientOptInput = setupAndRunGenericTest(configurator);
 
         assertValueInMap(clientOptInput.getConfig().additionalProperties(), "foo", "bar");
         assertValueInMap(clientOptInput.getConfig().additionalProperties(), "hello", "world");
-        assertValueInMap(clientOptInput.getConfig().additionalProperties(), "supportJava6", false);
         assertValueInMap(clientOptInput.getConfig().additionalProperties(), "useRxJava", true);
     }
 
@@ -245,13 +248,11 @@ public class CodegenConfiguratorTest {
     @Test
     public void testDynamicProperties() throws Exception {
         configurator.addDynamicProperty(CodegenConstants.LOCAL_VARIABLE_PREFIX, "_");
-        configurator.addDynamicProperty("supportJava6", false);
         configurator.addDynamicProperty("useRxJava", true);
 
         final ClientOptInput clientOptInput = setupAndRunGenericTest(configurator);
 
         assertValueInMap(clientOptInput.getConfig().additionalProperties(), CodegenConstants.LOCAL_VARIABLE_PREFIX, "_");
-        assertValueInMap(clientOptInput.getConfig().additionalProperties(), "supportJava6", false);
         assertValueInMap(clientOptInput.getConfig().additionalProperties(), "useRxJava", true);
     }
 
@@ -299,6 +300,13 @@ public class CodegenConfiguratorTest {
         assertEquals(configurator.getIgnoreFileOverride(), "/path/to/override/.swagger-codegen-ignore");
     }
 
+    @Test
+    public void testCodegenConfiguratorIsSerializable() {
+        final CodegenConfigurator configurator = CodegenConfigurator.fromFile("src/test/resources/sampleConfig.json");
+        // Simply ensure that the object can be serialized
+        SerializationUtils.serialize(configurator);
+    }
+
     @SuppressWarnings("unused")
     private ClientOptInput setupAndRunGenericTest(CodegenConfigurator configurator) {
 
@@ -343,11 +351,17 @@ public class CodegenConfiguratorTest {
 
             AuthParser.parse(auth); times=1; result = authorizationValues;
 
+            new ParseOptions();
+            times = 1;
+            result = options;
+            options.setResolve(true);
+            options.setFlatten(true);
+
             new SwaggerParser();
             times = 1;
             result = parser;
 
-            parser.read(spec, authorizationValues, true);
+            parser.read(spec, authorizationValues, options);
             times = 1;
             result = swagger;
 

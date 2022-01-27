@@ -1,6 +1,7 @@
 package io.swagger.model;
 
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 import io.swagger.annotations.ApiModelProperty;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,20 +11,23 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ModelApiResponse  {
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   private Integer code = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String type = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String message = null;
 
+  @ApiModelProperty(value = "")
+  private String type = null;
+
+  @ApiModelProperty(value = "")
+  private String message = null;
  /**
    * Get code
    * @return code
   **/
+  @JsonProperty("code")
   public Integer getCode() {
     return code;
   }
@@ -41,6 +45,7 @@ public class ModelApiResponse  {
    * Get type
    * @return type
   **/
+  @JsonProperty("type")
   public String getType() {
     return type;
   }
@@ -58,6 +63,7 @@ public class ModelApiResponse  {
    * Get message
    * @return message
   **/
+  @JsonProperty("message")
   public String getMessage() {
     return message;
   }
@@ -88,7 +94,7 @@ public class ModelApiResponse  {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private static String toIndentedString(Object o) {
+  private static String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

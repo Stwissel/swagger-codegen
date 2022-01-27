@@ -14,8 +14,10 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -36,7 +38,7 @@ public class SpecialModelName {
    * Get specialPropertyName
    * @return specialPropertyName
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Long getSpecialPropertyName() {
     return specialPropertyName;
   }
@@ -84,6 +86,6 @@ public class SpecialModelName {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
 }
 

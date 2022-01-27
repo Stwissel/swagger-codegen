@@ -1,6 +1,7 @@
 package io.swagger.model;
 
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 import io.swagger.annotations.ApiModelProperty;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,18 +11,20 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class HasOnlyReadOnly  {
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   private String bar = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String foo = null;
 
+  @ApiModelProperty(value = "")
+  private String foo = null;
  /**
    * Get bar
    * @return bar
   **/
+  @JsonProperty("bar")
   public String getBar() {
     return bar;
   }
@@ -31,6 +34,7 @@ public class HasOnlyReadOnly  {
    * Get foo
    * @return foo
   **/
+  @JsonProperty("foo")
   public String getFoo() {
     return foo;
   }
@@ -52,7 +56,7 @@ public class HasOnlyReadOnly  {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private static String toIndentedString(Object o) {
+  private static String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

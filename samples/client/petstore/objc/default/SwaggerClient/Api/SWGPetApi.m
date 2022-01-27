@@ -60,9 +60,6 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
     completionHandler: (void (^)(NSError* error)) handler {
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pet"];
 
-    // remove format in URL if needed
-    [resourcePath replaceOccurrencesOfString:@".{format}" withString:@".json" options:0 range:NSMakeRange(0,resourcePath.length)];
-
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -132,9 +129,6 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
 
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pet/{petId}"];
 
-    // remove format in URL if needed
-    [resourcePath replaceOccurrencesOfString:@".{format}" withString:@".json" options:0 range:NSMakeRange(0,resourcePath.length)];
-
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (petId != nil) {
         pathParams[@"petId"] = petId;
@@ -186,8 +180,8 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
 
 ///
 /// Finds Pets by status
-/// Multiple status values can be provided with comma seperated strings
-///  @param status Status values that need to be considered for filter (optional, default to available)
+/// Multiple status values can be provided with comma separated strings
+///  @param status Status values that need to be considered for filter (optional)
 ///
 ///  @returns NSArray<SWGPet>*
 ///
@@ -195,15 +189,11 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
     completionHandler: (void (^)(NSArray<SWGPet>* output, NSError* error)) handler {
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pet/findByStatus"];
 
-    // remove format in URL if needed
-    [resourcePath replaceOccurrencesOfString:@".{format}" withString:@".json" options:0 range:NSMakeRange(0,resourcePath.length)];
-
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
     if (status != nil) {
         queryParams[@"status"] = [[SWGQueryParamCollection alloc] initWithValuesAndFormat: status format: @"multi"];
-        
     }
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.apiClient.configuration.defaultHeaders];
     [headerParams addEntriesFromDictionary:self.defaultHeaders];
@@ -247,7 +237,7 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
 
 ///
 /// Finds Pets by tags
-/// Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
+/// Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
 ///  @param tags Tags to filter by (optional)
 ///
 ///  @returns NSArray<SWGPet>*
@@ -256,15 +246,11 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
     completionHandler: (void (^)(NSArray<SWGPet>* output, NSError* error)) handler {
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pet/findByTags"];
 
-    // remove format in URL if needed
-    [resourcePath replaceOccurrencesOfString:@".{format}" withString:@".json" options:0 range:NSMakeRange(0,resourcePath.length)];
-
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
     if (tags != nil) {
         queryParams[@"tags"] = [[SWGQueryParamCollection alloc] initWithValuesAndFormat: tags format: @"multi"];
-        
     }
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.apiClient.configuration.defaultHeaders];
     [headerParams addEntriesFromDictionary:self.defaultHeaders];
@@ -328,9 +314,6 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
 
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pet/{petId}"];
 
-    // remove format in URL if needed
-    [resourcePath replaceOccurrencesOfString:@".{format}" withString:@".json" options:0 range:NSMakeRange(0,resourcePath.length)];
-
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (petId != nil) {
         pathParams[@"petId"] = petId;
@@ -352,7 +335,7 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
     NSString *requestContentType = [self.apiClient.sanitizer selectHeaderContentType:@[]];
 
     // Authentication setting
-    NSArray *authSettings = @[@"petstore_auth", @"api_key"];
+    NSArray *authSettings = @[@"api_key", @"petstore_auth"];
 
     id bodyParam = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
@@ -387,9 +370,6 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
 -(NSURLSessionTask*) updatePetWithBody: (SWGPet*) body
     completionHandler: (void (^)(NSError* error)) handler {
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pet"];
-
-    // remove format in URL if needed
-    [resourcePath replaceOccurrencesOfString:@".{format}" withString:@".json" options:0 range:NSMakeRange(0,resourcePath.length)];
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
 
@@ -462,9 +442,6 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
     }
 
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pet/{petId}"];
-
-    // remove format in URL if needed
-    [resourcePath replaceOccurrencesOfString:@".{format}" withString:@".json" options:0 range:NSMakeRange(0,resourcePath.length)];
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (petId != nil) {
@@ -545,9 +522,6 @@ NSInteger kSWGPetApiMissingParamErrorCode = 234513;
     }
 
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pet/{petId}/uploadImage"];
-
-    // remove format in URL if needed
-    [resourcePath replaceOccurrencesOfString:@".{format}" withString:@".json" options:0 range:NSMakeRange(0,resourcePath.length)];
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (petId != nil) {

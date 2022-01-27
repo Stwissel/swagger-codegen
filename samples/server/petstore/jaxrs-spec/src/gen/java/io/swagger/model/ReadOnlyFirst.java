@@ -1,16 +1,19 @@
 package io.swagger.model;
 
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class ReadOnlyFirst   {
+public class ReadOnlyFirst  implements Serializable {
   
-  private String bar = null;
-  private String baz = null;
+  private @Valid String bar = null;
+  private @Valid String baz = null;
 
   /**
    **/
@@ -20,7 +23,8 @@ public class ReadOnlyFirst   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("bar")
   public String getBar() {
     return bar;
   }
@@ -36,7 +40,8 @@ public class ReadOnlyFirst   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("baz")
   public String getBaz() {
     return baz;
   }
@@ -46,7 +51,7 @@ public class ReadOnlyFirst   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -78,10 +83,11 @@ public class ReadOnlyFirst   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

@@ -14,9 +14,15 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
 import android.os.Parcelable;
 import android.os.Parcel;
 
@@ -49,6 +55,8 @@ public class User implements Parcelable {
   @SerializedName("userStatus")
   private Integer userStatus = null;
 
+  public User() {
+  }
   public User id(Long id) {
     this.id = id;
     return this;
@@ -58,7 +66,7 @@ public class User implements Parcelable {
    * Get id
    * @return id
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Long getId() {
     return id;
   }
@@ -76,7 +84,7 @@ public class User implements Parcelable {
    * Get username
    * @return username
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getUsername() {
     return username;
   }
@@ -94,7 +102,7 @@ public class User implements Parcelable {
    * Get firstName
    * @return firstName
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getFirstName() {
     return firstName;
   }
@@ -112,7 +120,7 @@ public class User implements Parcelable {
    * Get lastName
    * @return lastName
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getLastName() {
     return lastName;
   }
@@ -130,7 +138,7 @@ public class User implements Parcelable {
    * Get email
    * @return email
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getEmail() {
     return email;
   }
@@ -148,7 +156,7 @@ public class User implements Parcelable {
    * Get password
    * @return password
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getPassword() {
     return password;
   }
@@ -166,7 +174,7 @@ public class User implements Parcelable {
    * Get phone
    * @return phone
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getPhone() {
     return phone;
   }
@@ -184,7 +192,7 @@ public class User implements Parcelable {
    * User Status
    * @return userStatus
   **/
-  @ApiModelProperty(example = "null", value = "User Status")
+  @ApiModelProperty(value = "User Status")
   public Integer getUserStatus() {
     return userStatus;
   }
@@ -246,32 +254,20 @@ public class User implements Parcelable {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
+
   public void writeToParcel(Parcel out, int flags) {
-     
     out.writeValue(id);
-
     out.writeValue(username);
-
     out.writeValue(firstName);
-
     out.writeValue(lastName);
-
     out.writeValue(email);
-
     out.writeValue(password);
-
     out.writeValue(phone);
-
     out.writeValue(userStatus);
   }
 
-  public User() {
-    super();
-  }
-
   User(Parcel in) {
-    
     id = (Long)in.readValue(null);
     username = (String)in.readValue(null);
     firstName = (String)in.readValue(null);
@@ -281,7 +277,7 @@ public class User implements Parcelable {
     phone = (String)in.readValue(null);
     userStatus = (Integer)in.readValue(null);
   }
-  
+
   public int describeContents() {
     return 0;
   }

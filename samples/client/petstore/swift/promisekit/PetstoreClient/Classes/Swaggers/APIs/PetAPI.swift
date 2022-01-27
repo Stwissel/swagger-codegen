@@ -234,50 +234,88 @@ public class PetAPI: APIBase {
        - type: oauth2
        - name: petstore_auth
      - examples: [{contentType=application/json, example=[ {
-  "photoUrls" : [ "aeiou" ],
+  "photoUrls" : [ "photoUrls", "photoUrls" ],
   "name" : "doggie",
-  "id" : 123456789,
+  "id" : 0,
   "category" : {
-    "name" : "aeiou",
-    "id" : 123456789
+    "name" : "name",
+    "id" : 6
   },
   "tags" : [ {
-    "name" : "aeiou",
-    "id" : 123456789
+    "name" : "name",
+    "id" : 1
+  }, {
+    "name" : "name",
+    "id" : 1
   } ],
-  "status" : "aeiou"
+  "status" : "available"
+}, {
+  "photoUrls" : [ "photoUrls", "photoUrls" ],
+  "name" : "doggie",
+  "id" : 0,
+  "category" : {
+    "name" : "name",
+    "id" : 6
+  },
+  "tags" : [ {
+    "name" : "name",
+    "id" : 1
+  }, {
+    "name" : "name",
+    "id" : 1
+  } ],
+  "status" : "available"
 } ]}, {contentType=application/xml, example=<Pet>
-  <id>123456</id>
+  <id>123456789</id>
   <name>doggie</name>
   <photoUrls>
-    <photoUrls>string</photoUrls>
+    <photoUrls>aeiou</photoUrls>
   </photoUrls>
   <tags>
   </tags>
-  <status>string</status>
+  <status>aeiou</status>
 </Pet>}]
      - examples: [{contentType=application/json, example=[ {
-  "photoUrls" : [ "aeiou" ],
+  "photoUrls" : [ "photoUrls", "photoUrls" ],
   "name" : "doggie",
-  "id" : 123456789,
+  "id" : 0,
   "category" : {
-    "name" : "aeiou",
-    "id" : 123456789
+    "name" : "name",
+    "id" : 6
   },
   "tags" : [ {
-    "name" : "aeiou",
-    "id" : 123456789
+    "name" : "name",
+    "id" : 1
+  }, {
+    "name" : "name",
+    "id" : 1
   } ],
-  "status" : "aeiou"
+  "status" : "available"
+}, {
+  "photoUrls" : [ "photoUrls", "photoUrls" ],
+  "name" : "doggie",
+  "id" : 0,
+  "category" : {
+    "name" : "name",
+    "id" : 6
+  },
+  "tags" : [ {
+    "name" : "name",
+    "id" : 1
+  }, {
+    "name" : "name",
+    "id" : 1
+  } ],
+  "status" : "available"
 } ]}, {contentType=application/xml, example=<Pet>
-  <id>123456</id>
+  <id>123456789</id>
   <name>doggie</name>
   <photoUrls>
-    <photoUrls>string</photoUrls>
+    <photoUrls>aeiou</photoUrls>
   </photoUrls>
   <tags>
   </tags>
-  <status>string</status>
+  <status>aeiou</status>
 </Pet>}]
      
      - parameter tags: (query) Tags to filter by (optional)
@@ -335,57 +373,63 @@ public class PetAPI: APIBase {
      Find pet by ID
      - GET /pet/{petId}
      - Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions
-     - OAuth:
-       - type: oauth2
-       - name: petstore_auth
      - API Key:
        - type: apiKey api_key 
        - name: api_key
+     - OAuth:
+       - type: oauth2
+       - name: petstore_auth
      - examples: [{contentType=application/json, example={
-  "photoUrls" : [ "aeiou" ],
+  "photoUrls" : [ "photoUrls", "photoUrls" ],
   "name" : "doggie",
-  "id" : 123456789,
+  "id" : 0,
   "category" : {
-    "name" : "aeiou",
-    "id" : 123456789
+    "name" : "name",
+    "id" : 6
   },
   "tags" : [ {
-    "name" : "aeiou",
-    "id" : 123456789
+    "name" : "name",
+    "id" : 1
+  }, {
+    "name" : "name",
+    "id" : 1
   } ],
-  "status" : "aeiou"
+  "status" : "available"
 }}, {contentType=application/xml, example=<Pet>
-  <id>123456</id>
+  <id>123456789</id>
   <name>doggie</name>
   <photoUrls>
-    <photoUrls>string</photoUrls>
+    <photoUrls>aeiou</photoUrls>
   </photoUrls>
   <tags>
   </tags>
-  <status>string</status>
+  <status>aeiou</status>
 </Pet>}]
      - examples: [{contentType=application/json, example={
-  "photoUrls" : [ "aeiou" ],
+  "photoUrls" : [ "photoUrls", "photoUrls" ],
   "name" : "doggie",
-  "id" : 123456789,
+  "id" : 0,
   "category" : {
-    "name" : "aeiou",
-    "id" : 123456789
+    "name" : "name",
+    "id" : 6
   },
   "tags" : [ {
-    "name" : "aeiou",
-    "id" : 123456789
+    "name" : "name",
+    "id" : 1
+  }, {
+    "name" : "name",
+    "id" : 1
   } ],
-  "status" : "aeiou"
+  "status" : "available"
 }}, {contentType=application/xml, example=<Pet>
-  <id>123456</id>
+  <id>123456789</id>
   <name>doggie</name>
   <photoUrls>
-    <photoUrls>string</photoUrls>
+    <photoUrls>aeiou</photoUrls>
   </photoUrls>
   <tags>
   </tags>
-  <status>string</status>
+  <status>aeiou</status>
 </Pet>}]
      
      - parameter petId: (path) ID of pet that needs to be fetched 

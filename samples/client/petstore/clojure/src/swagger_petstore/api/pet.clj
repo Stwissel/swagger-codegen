@@ -24,33 +24,12 @@
   ([optional-params]
    (:data (add-pet-with-http-info optional-params))))
 
-(defn add-pet-using-byte-array-with-http-info
-  "Fake endpoint to test byte array in body parameter for adding a new pet to the store
-  "
-  ([] (add-pet-using-byte-array-with-http-info nil))
-  ([{:keys [body ]}]
-   (call-api "/pet?testing_byte_array=true" :post
-             {:path-params   {}
-              :header-params {}
-              :query-params  {}
-              :form-params   {}
-              :body-param    body
-              :content-types ["application/json" "application/xml"]
-              :accepts       ["application/json" "application/xml"]
-              :auth-names    ["petstore_auth"]})))
-
-(defn add-pet-using-byte-array
-  "Fake endpoint to test byte array in body parameter for adding a new pet to the store
-  "
-  ([] (add-pet-using-byte-array nil))
-  ([optional-params]
-   (:data (add-pet-using-byte-array-with-http-info optional-params))))
-
 (defn delete-pet-with-http-info
   "Deletes a pet
   "
   ([pet-id ] (delete-pet-with-http-info pet-id nil))
   ([pet-id {:keys [api-key ]}]
+   (check-required-params pet-id)
    (call-api "/pet/{petId}" :delete
              {:path-params   {"petId" pet-id }
               :header-params {"api_key" api-key }
@@ -113,6 +92,7 @@
   "Find pet by ID
   Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions"
   [pet-id ]
+  (check-required-params pet-id)
   (call-api "/pet/{petId}" :get
             {:path-params   {"petId" pet-id }
              :header-params {}
@@ -127,44 +107,6 @@
   Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions"
   [pet-id ]
   (:data (get-pet-by-id-with-http-info pet-id)))
-
-(defn get-pet-by-id-in-object-with-http-info
-  "Fake endpoint to test inline arbitrary object return by 'Find pet by ID'
-  Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions"
-  [pet-id ]
-  (call-api "/pet/{petId}?response=inline_arbitrary_object" :get
-            {:path-params   {"petId" pet-id }
-             :header-params {}
-             :query-params  {}
-             :form-params   {}
-             :content-types []
-             :accepts       ["application/json" "application/xml"]
-             :auth-names    ["api_key" "petstore_auth"]}))
-
-(defn get-pet-by-id-in-object
-  "Fake endpoint to test inline arbitrary object return by 'Find pet by ID'
-  Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions"
-  [pet-id ]
-  (:data (get-pet-by-id-in-object-with-http-info pet-id)))
-
-(defn pet-pet-idtesting-byte-arraytrue-get-with-http-info
-  "Fake endpoint to test byte array return by 'Find pet by ID'
-  Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions"
-  [pet-id ]
-  (call-api "/pet/{petId}?testing_byte_array=true" :get
-            {:path-params   {"petId" pet-id }
-             :header-params {}
-             :query-params  {}
-             :form-params   {}
-             :content-types []
-             :accepts       ["application/json" "application/xml"]
-             :auth-names    ["api_key" "petstore_auth"]}))
-
-(defn pet-pet-idtesting-byte-arraytrue-get
-  "Fake endpoint to test byte array return by 'Find pet by ID'
-  Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions"
-  [pet-id ]
-  (:data (pet-pet-idtesting-byte-arraytrue-get-with-http-info pet-id)))
 
 (defn update-pet-with-http-info
   "Update an existing pet
@@ -193,6 +135,7 @@
   "
   ([pet-id ] (update-pet-with-form-with-http-info pet-id nil))
   ([pet-id {:keys [name status ]}]
+   (check-required-params pet-id)
    (call-api "/pet/{petId}" :post
              {:path-params   {"petId" pet-id }
               :header-params {}
@@ -214,6 +157,7 @@
   "
   ([pet-id ] (upload-file-with-http-info pet-id nil))
   ([pet-id {:keys [additional-metadata ^File file ]}]
+   (check-required-params pet-id)
    (call-api "/pet/{petId}/uploadImage" :post
              {:path-params   {"petId" pet-id }
               :header-params {}
@@ -229,3 +173,4 @@
   ([pet-id ] (upload-file pet-id nil))
   ([pet-id optional-params]
    (:data (upload-file-with-http-info pet-id optional-params))))
+

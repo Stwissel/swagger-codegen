@@ -1,12 +1,18 @@
-FROM microsoft/dotnet:latest
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build-env
+WORKDIR /app
 
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
-RUN mkdir -p /app/IO.Swagger
-COPY . /app/IO.Swagger
-WORKDIR /app/IO.Swagger
+# copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
 
-EXPOSE 5000/tcp
+# copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-RUN ["dotnet", "restore"]
-ENTRYPOINT ["dotnet", "run", "-p", "project.json", "web"]
+# build runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet", "IO.Swagger.dll"]

@@ -13,21 +13,31 @@
 #ifndef ModelFactory_H_
 #define ModelFactory_H_
 
+#include "SWGObject.h"
 
+#include "SWGAmount.h"
 #include "SWGApiResponse.h"
 #include "SWGCategory.h"
+#include "SWGCurrency.h"
 #include "SWGOrder.h"
 #include "SWGPet.h"
 #include "SWGTag.h"
 #include "SWGUser.h"
 
 namespace Swagger {
+
   inline void* create(QString type) {
+    if(QString("SWGAmount").compare(type) == 0) {
+      return new SWGAmount();
+    }
     if(QString("SWGApiResponse").compare(type) == 0) {
       return new SWGApiResponse();
     }
     if(QString("SWGCategory").compare(type) == 0) {
       return new SWGCategory();
+    }
+    if(QString("SWGCurrency").compare(type) == 0) {
+      return new SWGCurrency();
     }
     if(QString("SWGOrder").compare(type) == 0) {
       return new SWGOrder();
@@ -46,16 +56,16 @@ namespace Swagger {
   }
 
   inline void* create(QString json, QString type) {
-    void* val = create(type);
-    if(val != nullptr) {
-      SWGObject* obj = static_cast<SWGObject*>(val);
-      return obj->fromJson(json);
-    }
     if(type.startsWith("QString")) {
       return new QString();
+    }    
+    auto val = static_cast<SWGObject*>(create(type));
+    if(val != nullptr) {
+      return val->fromJson(json);
     }
     return nullptr;
   }
-} /* namespace Swagger */
+
+}
 
 #endif /* ModelFactory_H_ */

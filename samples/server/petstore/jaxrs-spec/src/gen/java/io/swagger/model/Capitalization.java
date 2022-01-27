@@ -1,20 +1,23 @@
 package io.swagger.model;
 
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class Capitalization   {
+public class Capitalization  implements Serializable {
   
-  private String smallCamel = null;
-  private String capitalCamel = null;
-  private String smallSnake = null;
-  private String capitalSnake = null;
-  private String scAETHFlowPoints = null;
-  private String ATT_NAME = null;
+  private @Valid String smallCamel = null;
+  private @Valid String capitalCamel = null;
+  private @Valid String smallSnake = null;
+  private @Valid String capitalSnake = null;
+  private @Valid String scAETHFlowPoints = null;
+  private @Valid String ATT_NAME = null;
 
   /**
    **/
@@ -24,7 +27,8 @@ public class Capitalization   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("smallCamel")
   public String getSmallCamel() {
     return smallCamel;
   }
@@ -40,7 +44,8 @@ public class Capitalization   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("CapitalCamel")
   public String getCapitalCamel() {
     return capitalCamel;
   }
@@ -56,7 +61,8 @@ public class Capitalization   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("small_Snake")
   public String getSmallSnake() {
     return smallSnake;
   }
@@ -72,7 +78,8 @@ public class Capitalization   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("Capital_Snake")
   public String getCapitalSnake() {
     return capitalSnake;
   }
@@ -88,7 +95,8 @@ public class Capitalization   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("SCA_ETH_Flow_Points")
   public String getScAETHFlowPoints() {
     return scAETHFlowPoints;
   }
@@ -105,7 +113,8 @@ public class Capitalization   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "Name of the pet ")
+  @ApiModelProperty(value = "Name of the pet ")
+  @JsonProperty("ATT_NAME")
   public String getATTNAME() {
     return ATT_NAME;
   }
@@ -115,7 +124,7 @@ public class Capitalization   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -155,10 +164,11 @@ public class Capitalization   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

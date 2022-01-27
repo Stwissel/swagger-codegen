@@ -22,17 +22,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 /**
  * AdditionalPropertiesClass
  */
-
 public class AdditionalPropertiesClass   {
   @JsonProperty("map_property")
-  private Map<String, String> mapProperty = new HashMap<String, String>();
+  private Map<String, String> mapProperty = null;
 
   @JsonProperty("map_of_map_property")
-  private Map<String, Map<String, String>> mapOfMapProperty = new HashMap<String, Map<String, String>>();
+  private Map<String, Map<String, String>> mapOfMapProperty = null;
 
   public AdditionalPropertiesClass mapProperty(Map<String, String> mapProperty) {
     this.mapProperty = mapProperty;
@@ -40,14 +40,17 @@ public class AdditionalPropertiesClass   {
   }
 
   public AdditionalPropertiesClass putMapPropertyItem(String key, String mapPropertyItem) {
+    if (this.mapProperty == null) {
+      this.mapProperty = new HashMap<String, String>();
+    }
     this.mapProperty.put(key, mapPropertyItem);
     return this;
   }
 
-   /**
+  /**
    * Get mapProperty
    * @return mapProperty
-  **/
+   **/
   @JsonProperty("map_property")
   @ApiModelProperty(value = "")
   public Map<String, String> getMapProperty() {
@@ -64,16 +67,20 @@ public class AdditionalPropertiesClass   {
   }
 
   public AdditionalPropertiesClass putMapOfMapPropertyItem(String key, Map<String, String> mapOfMapPropertyItem) {
+    if (this.mapOfMapProperty == null) {
+      this.mapOfMapProperty = new HashMap<String, Map<String, String>>();
+    }
     this.mapOfMapProperty.put(key, mapOfMapPropertyItem);
     return this;
   }
 
-   /**
+  /**
    * Get mapOfMapProperty
    * @return mapOfMapProperty
-  **/
+   **/
   @JsonProperty("map_of_map_property")
   @ApiModelProperty(value = "")
+  @Valid
   public Map<String, Map<String, String>> getMapOfMapProperty() {
     return mapOfMapProperty;
   }

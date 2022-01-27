@@ -1,15 +1,20 @@
 package io.swagger.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class EnumArrays   {
+public class EnumArrays  implements Serializable {
   
 
 public enum JustSymbolEnum {
@@ -28,10 +33,12 @@ public enum JustSymbolEnum {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return String.valueOf(value);
     }
 
+    @JsonCreator
     public static JustSymbolEnum fromValue(String v) {
         for (JustSymbolEnum b : JustSymbolEnum.values()) {
             if (String.valueOf(b.value).equals(v)) {
@@ -42,7 +49,7 @@ public enum JustSymbolEnum {
     }
 }
 
-  private JustSymbolEnum justSymbol = null;
+  private @Valid JustSymbolEnum justSymbol = null;
 
 public enum ArrayEnumEnum {
 
@@ -60,10 +67,12 @@ public enum ArrayEnumEnum {
     }
 
     @Override
+    @JsonValue
     public String toString() {
         return String.valueOf(value);
     }
 
+    @JsonCreator
     public static ArrayEnumEnum fromValue(String v) {
         for (ArrayEnumEnum b : ArrayEnumEnum.values()) {
             if (String.valueOf(b.value).equals(v)) {
@@ -74,7 +83,7 @@ public enum ArrayEnumEnum {
     }
 }
 
-  private List<ArrayEnumEnum> arrayEnum = new ArrayList<ArrayEnumEnum>();
+  private @Valid List<ArrayEnumEnum> arrayEnum = new ArrayList<ArrayEnumEnum>();
 
   /**
    **/
@@ -84,7 +93,8 @@ public enum ArrayEnumEnum {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("just_symbol")
   public JustSymbolEnum getJustSymbol() {
     return justSymbol;
   }
@@ -100,7 +110,8 @@ public enum ArrayEnumEnum {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("array_enum")
   public List<ArrayEnumEnum> getArrayEnum() {
     return arrayEnum;
   }
@@ -110,7 +121,7 @@ public enum ArrayEnumEnum {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -142,10 +153,11 @@ public enum ArrayEnumEnum {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

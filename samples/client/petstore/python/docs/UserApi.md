@@ -1,6 +1,6 @@
 # petstore_api.UserApi
 
-All URIs are relative to *http://petstore.swagger.io/v2*
+All URIs are relative to *http://petstore.swagger.io:80/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -21,9 +21,9 @@ Create user
 
 This can only be done by the logged in user.
 
-### Example 
+### Example
 ```python
-from __future__ import print_statement
+from __future__ import print_function
 import time
 import petstore_api
 from petstore_api.rest import ApiException
@@ -33,7 +33,7 @@ from pprint import pprint
 api_instance = petstore_api.UserApi()
 body = petstore_api.User() # User | Created user object
 
-try: 
+try:
     # Create user
     api_instance.create_user(body)
 except ApiException as e:
@@ -68,9 +68,9 @@ Creates list of users with given input array
 
 
 
-### Example 
+### Example
 ```python
-from __future__ import print_statement
+from __future__ import print_function
 import time
 import petstore_api
 from petstore_api.rest import ApiException
@@ -80,7 +80,7 @@ from pprint import pprint
 api_instance = petstore_api.UserApi()
 body = [petstore_api.User()] # list[User] | List of user object
 
-try: 
+try:
     # Creates list of users with given input array
     api_instance.create_users_with_array_input(body)
 except ApiException as e:
@@ -115,9 +115,9 @@ Creates list of users with given input array
 
 
 
-### Example 
+### Example
 ```python
-from __future__ import print_statement
+from __future__ import print_function
 import time
 import petstore_api
 from petstore_api.rest import ApiException
@@ -127,7 +127,7 @@ from pprint import pprint
 api_instance = petstore_api.UserApi()
 body = [petstore_api.User()] # list[User] | List of user object
 
-try: 
+try:
     # Creates list of users with given input array
     api_instance.create_users_with_list_input(body)
 except ApiException as e:
@@ -162,9 +162,9 @@ Delete user
 
 This can only be done by the logged in user.
 
-### Example 
+### Example
 ```python
-from __future__ import print_statement
+from __future__ import print_function
 import time
 import petstore_api
 from petstore_api.rest import ApiException
@@ -174,7 +174,7 @@ from pprint import pprint
 api_instance = petstore_api.UserApi()
 username = 'username_example' # str | The name that needs to be deleted
 
-try: 
+try:
     # Delete user
     api_instance.delete_user(username)
 except ApiException as e:
@@ -209,9 +209,9 @@ Get user by user name
 
 
 
-### Example 
+### Example
 ```python
-from __future__ import print_statement
+from __future__ import print_function
 import time
 import petstore_api
 from petstore_api.rest import ApiException
@@ -219,9 +219,9 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = petstore_api.UserApi()
-username = 'username_example' # str | The name that needs to be fetched. Use user1 for testing. 
+username = 'username_example' # str | The name that needs to be fetched. Use user1 for testing.
 
-try: 
+try:
     # Get user by user name
     api_response = api_instance.get_user_by_name(username)
     pprint(api_response)
@@ -233,7 +233,7 @@ except ApiException as e:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **username** | **str**| The name that needs to be fetched. Use user1 for testing.  | 
+ **username** | **str**| The name that needs to be fetched. Use user1 for testing. | 
 
 ### Return type
 
@@ -257,9 +257,9 @@ Logs user into the system
 
 
 
-### Example 
+### Example
 ```python
-from __future__ import print_statement
+from __future__ import print_function
 import time
 import petstore_api
 from petstore_api.rest import ApiException
@@ -270,7 +270,7 @@ api_instance = petstore_api.UserApi()
 username = 'username_example' # str | The user name for login
 password = 'password_example' # str | The password for login in clear text
 
-try: 
+try:
     # Logs user into the system
     api_response = api_instance.login_user(username, password)
     pprint(api_response)
@@ -307,9 +307,9 @@ Logs out current logged in user session
 
 
 
-### Example 
+### Example
 ```python
-from __future__ import print_statement
+from __future__ import print_function
 import time
 import petstore_api
 from petstore_api.rest import ApiException
@@ -318,7 +318,7 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = petstore_api.UserApi()
 
-try: 
+try:
     # Logs out current logged in user session
     api_instance.logout_user()
 except ApiException as e:
@@ -350,9 +350,9 @@ Updated user
 
 This can only be done by the logged in user.
 
-### Example 
+### Example
 ```python
-from __future__ import print_statement
+from __future__ import print_function
 import time
 import petstore_api
 from petstore_api.rest import ApiException
@@ -363,7 +363,7 @@ api_instance = petstore_api.UserApi()
 username = 'username_example' # str | name that need to be deleted
 body = petstore_api.User() # User | Updated user object
 
-try: 
+try:
     # Updated user
     api_instance.update_user(username, body)
 except ApiException as e:

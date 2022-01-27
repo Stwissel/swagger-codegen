@@ -1,15 +1,18 @@
 package io.swagger.model;
 
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class SpecialModelName   {
+public class SpecialModelName  implements Serializable {
   
-  private Long specialPropertyName = null;
+  private @Valid Long specialPropertyName = null;
 
   /**
    **/
@@ -19,7 +22,8 @@ public class SpecialModelName   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("$special[property.name]")
   public Long getSpecialPropertyName() {
     return specialPropertyName;
   }
@@ -29,7 +33,7 @@ public class SpecialModelName   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -59,10 +63,11 @@ public class SpecialModelName   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

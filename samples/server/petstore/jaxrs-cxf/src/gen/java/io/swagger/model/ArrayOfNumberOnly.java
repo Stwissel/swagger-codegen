@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 import io.swagger.annotations.ApiModelProperty;
 import javax.xml.bind.annotation.XmlElement;
@@ -13,16 +14,18 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ArrayOfNumberOnly  {
   
-  @ApiModelProperty(example = "null", value = "")
-  private List<BigDecimal> arrayNumber = new ArrayList<BigDecimal>();
-
+  @ApiModelProperty(value = "")
+  @Valid
+  private List<BigDecimal> arrayNumber = null;
  /**
    * Get arrayNumber
    * @return arrayNumber
   **/
+  @JsonProperty("ArrayNumber")
   public List<BigDecimal> getArrayNumber() {
     return arrayNumber;
   }
@@ -56,7 +59,7 @@ public class ArrayOfNumberOnly  {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private static String toIndentedString(Object o) {
+  private static String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

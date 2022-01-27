@@ -1,16 +1,19 @@
 package io.swagger.model;
 
 import io.swagger.model.Animal;
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class Cat extends Animal  {
+public class Cat extends Animal implements Serializable {
   
-  private Boolean declawed = null;
+  private @Valid Boolean declawed = null;
 
   /**
    **/
@@ -20,8 +23,9 @@ public class Cat extends Animal  {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
-  public Boolean getDeclawed() {
+  @ApiModelProperty(value = "")
+  @JsonProperty("declawed")
+  public Boolean isDeclawed() {
     return declawed;
   }
   public void setDeclawed(Boolean declawed) {
@@ -30,7 +34,7 @@ public class Cat extends Animal  {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -60,10 +64,11 @@ public class Cat extends Animal  {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

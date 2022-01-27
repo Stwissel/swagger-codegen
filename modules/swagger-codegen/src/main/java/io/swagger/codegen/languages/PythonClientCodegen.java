@@ -17,21 +17,32 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig {
     public static final String PACKAGE_URL = "packageUrl";
+    public static final String DEFAULT_LIBRARY = "urllib3";
 
-    protected String packageName;
+    public static final String WRITE_BINARY_OPTION = "writeBinary";
+
+    public static final String CASE_OPTION = "case";
+    public static final String CAMEL_CASE_OPTION = "camel";
+    public static final String SNAKE_CASE_OPTION = "snake";
+    public static final String KEBAB_CASE_OPTION = "kebab";
+
+    protected String packageName; // e.g. petstore_api
     protected String packageVersion;
+    protected String projectName; // for setup.py, e.g. petstore-api
     protected String packageUrl;
     protected String apiDocPath = "docs/";
     protected String modelDocPath = "docs/";
+    protected String caseType;
 
     protected Map<Character, String> regexModifiers;
 
-	private String testFolder;
+    private String testFolder;
 
     public PythonClientCodegen() {
         super();
@@ -40,6 +51,7 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         // at the moment
         importMapping.clear();
 
+        supportsInheritance = true;
         modelPackage = "models";
         apiPackage = "api";
         outputFolder = "generated-code" + File.separatorChar + "python";
@@ -57,15 +69,21 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
 
         testFolder = "test";
 
+        // default HIDE_GENERATION_TIMESTAMP to true
+        hideGenerationTimestamp = Boolean.TRUE;
+
         languageSpecificPrimitives.clear();
         languageSpecificPrimitives.add("int");
         languageSpecificPrimitives.add("float");
         languageSpecificPrimitives.add("list");
+        languageSpecificPrimitives.add("dict");
         languageSpecificPrimitives.add("bool");
         languageSpecificPrimitives.add("str");
         languageSpecificPrimitives.add("datetime");
         languageSpecificPrimitives.add("date");
         languageSpecificPrimitives.add("object");
+
+        instantiationTypes.put("map", "dict");
 
         typeMapping.clear();
         typeMapping.put("integer", "int");
@@ -88,7 +106,7 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         // map uuid to string for the time being
         typeMapping.put("UUID", "str");
 
-        // from https://docs.python.org/release/2.5.4/ref/keywords.html
+        // from https://docs.python.org/3/reference/lexical_analysis.html#keywords
         setReservedWordsLowerCase(
                 Arrays.asList(
                     // local variable name used in API methods (endpoints)
@@ -100,7 +118,8 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
                     "and", "del", "from", "not", "while", "as", "elif", "global", "or", "with",
                     "assert", "else", "if", "pass", "yield", "break", "except", "import",
                     "print", "class", "exec", "in", "raise", "continue", "finally", "is",
-                    "return", "def", "for", "lambda", "try", "self"));
+                    "return", "def", "for", "lambda", "try", "self", "nonlocal", "None", "True", "nonlocal",
+                    "float", "int", "str", "date", "datetime", "False", "await", "async"));
 
         regexModifiers = new HashMap<Character, String>();
         regexModifiers.put('i', "IGNORECASE");
@@ -113,13 +132,24 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         cliOptions.clear();
         cliOptions.add(new CliOption(CodegenConstants.PACKAGE_NAME, "python package name (convention: snake_case).")
                 .defaultValue("swagger_client"));
+        cliOptions.add(new CliOption(CodegenConstants.PROJECT_NAME, "python project name in setup.py (e.g. petstore-api)."));
         cliOptions.add(new CliOption(CodegenConstants.PACKAGE_VERSION, "python package version.")
                 .defaultValue("1.0.0"));
         cliOptions.add(new CliOption(PACKAGE_URL, "python package URL."));
         cliOptions.add(CliOption.newBoolean(CodegenConstants.SORT_PARAMS_BY_REQUIRED_FLAG,
                 CodegenConstants.SORT_PARAMS_BY_REQUIRED_FLAG_DESC).defaultValue(Boolean.TRUE.toString()));
-        cliOptions.add(new CliOption(CodegenConstants.HIDE_GENERATION_TIMESTAMP, "hides the timestamp when files were generated")
+        cliOptions.add(new CliOption(CodegenConstants.HIDE_GENERATION_TIMESTAMP, CodegenConstants.HIDE_GENERATION_TIMESTAMP_DESC)
                 .defaultValue(Boolean.TRUE.toString()));
+
+        supportedLibraries.put("urllib3", "urllib3-based client");
+        supportedLibraries.put("asyncio", "Asyncio-based client (python 3.5+)");
+        supportedLibraries.put("tornado", "tornado-based client");
+        CliOption libraryOption = new CliOption(CodegenConstants.LIBRARY, "library template (sub-template) to use");
+        libraryOption.setDefault(DEFAULT_LIBRARY);
+        cliOptions.add(libraryOption);
+        setLibrary(DEFAULT_LIBRARY);
+
+        this.caseType = SNAKE_CASE_OPTION;
     }
 
     @Override
@@ -138,6 +168,16 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
             setPackageName("swagger_client");
         }
 
+        if (additionalProperties.containsKey(CodegenConstants.PROJECT_NAME)) {
+            String projectName = (String) additionalProperties.get(CodegenConstants.PROJECT_NAME);
+            setProjectName(projectName.replaceAll("[^a-zA-Z0-9\\s\\-_]",""));
+        }
+        else {
+            // default: set project based on package name
+            // e.g. petstore_api (package name) => petstore-api (project name)
+            setProjectName(packageName.replaceAll("_", "-"));
+        }
+
         if (additionalProperties.containsKey(CodegenConstants.PACKAGE_VERSION)) {
             setPackageVersion((String) additionalProperties.get(CodegenConstants.PACKAGE_VERSION));
         }
@@ -145,14 +185,12 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
             setPackageVersion("1.0.0");
         }
 
-        // default HIDE_GENERATION_TIMESTAMP to true
-        if (!additionalProperties.containsKey(CodegenConstants.HIDE_GENERATION_TIMESTAMP)) {
-            additionalProperties.put(CodegenConstants.HIDE_GENERATION_TIMESTAMP, Boolean.TRUE.toString());
-        } else {
-            additionalProperties.put(CodegenConstants.HIDE_GENERATION_TIMESTAMP,
-                    Boolean.valueOf(additionalProperties().get(CodegenConstants.HIDE_GENERATION_TIMESTAMP).toString()));
+        if (additionalProperties.containsKey(WRITE_BINARY_OPTION)) {
+            boolean optionValue = Boolean.parseBoolean(String.valueOf(additionalProperties.get(WRITE_BINARY_OPTION)));
+            additionalProperties.put(WRITE_BINARY_OPTION, optionValue);
         }
 
+        additionalProperties.put(CodegenConstants.PROJECT_NAME, projectName);
         additionalProperties.put(CodegenConstants.PACKAGE_NAME, packageName);
         additionalProperties.put(CodegenConstants.PACKAGE_VERSION, packageVersion);
 
@@ -164,24 +202,20 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
             setPackageUrl((String) additionalProperties.get(PACKAGE_URL));
         }
 
-        String swaggerFolder = packageName;
+        this.setCaseType();
 
-        modelPackage = swaggerFolder + File.separatorChar + "models";
-        apiPackage = swaggerFolder + File.separatorChar + "apis";
+        final String packageFolder = packageName.replace('.', File.separatorChar);
 
         supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
 
-        supportingFiles.add(new SupportingFile("setup.mustache", "", "setup.py"));
         supportingFiles.add(new SupportingFile("tox.mustache", "", "tox.ini"));
         supportingFiles.add(new SupportingFile("test-requirements.mustache", "", "test-requirements.txt"));
         supportingFiles.add(new SupportingFile("requirements.mustache", "", "requirements.txt"));
 
-        supportingFiles.add(new SupportingFile("api_client.mustache", swaggerFolder, "api_client.py"));
-        supportingFiles.add(new SupportingFile("rest.mustache", swaggerFolder, "rest.py"));
-        supportingFiles.add(new SupportingFile("configuration.mustache", swaggerFolder, "configuration.py"));
-        supportingFiles.add(new SupportingFile("__init__package.mustache", swaggerFolder, "__init__.py"));
-        supportingFiles.add(new SupportingFile("__init__model.mustache", modelPackage, "__init__.py"));
-        supportingFiles.add(new SupportingFile("__init__api.mustache", apiPackage, "__init__.py"));
+        supportingFiles.add(new SupportingFile("configuration.mustache", packageFolder, "configuration.py"));
+        supportingFiles.add(new SupportingFile("__init__package.mustache", packageFolder, "__init__.py"));
+        supportingFiles.add(new SupportingFile("__init__model.mustache", packageFolder + File.separatorChar + modelPackage, "__init__.py"));
+        supportingFiles.add(new SupportingFile("__init__api.mustache", packageFolder + File.separatorChar + apiPackage, "__init__.py"));
 
         if(Boolean.FALSE.equals(excludeTests)) {
             supportingFiles.add(new SupportingFile("__init__test.mustache", testFolder, "__init__.py"));
@@ -189,10 +223,47 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         supportingFiles.add(new SupportingFile("git_push.sh.mustache", "", "git_push.sh"));
         supportingFiles.add(new SupportingFile("gitignore.mustache", "", ".gitignore"));
         supportingFiles.add(new SupportingFile("travis.mustache", "", ".travis.yml"));
+        supportingFiles.add(new SupportingFile("setup.mustache", "", "setup.py"));
+        supportingFiles.add(new SupportingFile("api_client.mustache", packageFolder, "api_client.py"));
+
+        if ("asyncio".equals(getLibrary())) {
+            supportingFiles.add(new SupportingFile("asyncio/rest.mustache", packageFolder, "rest.py"));
+            additionalProperties.put("asyncio", "true");
+        } else if ("tornado".equals(getLibrary())) {
+            supportingFiles.add(new SupportingFile("tornado/rest.mustache", packageFolder, "rest.py"));
+            additionalProperties.put("tornado", "true");
+        } else {
+            supportingFiles.add(new SupportingFile("rest.mustache", packageFolder, "rest.py"));
+        }
+
+        modelPackage = packageName + "." + modelPackage;
+        apiPackage = packageName + "." + apiPackage;
+
     }
 
     private static String dropDots(String str) {
         return str.replaceAll("\\.", "_");
+    }
+
+    @Override
+    public String toModelImport(String name) {
+        String modelImport;
+        if (StringUtils.startsWithAny(name,"import", "from")) {
+            modelImport = name;
+        } else {
+            modelImport = "from ";
+            if (!"".equals(modelPackage())) {
+                modelImport += modelPackage() + ".";
+            }
+            modelImport += toModelFilename(name)+ " import " + name;
+        }
+        return modelImport;
+    }
+
+    @Override
+    public Map<String, Object> postProcessModels(Map<String, Object> objs) {
+        // process enum in models
+        return postProcessModelsEnum(objs);
     }
 
     @Override
@@ -216,8 +287,8 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
 
             //Must follow Perl /pattern/modifiers convention
             if(pattern.charAt(0) != '/' || i < 2) {
-                throw new IllegalArgumentException("Pattern must follow the Perl "
-                        + "/pattern/modifiers convention. "+pattern+" is not valid.");
+                pattern = String.format("/%s/", pattern);
+                i = pattern.lastIndexOf('/');
             }
 
             String regex = pattern.substring(1, i).replace("'", "\\'");
@@ -232,6 +303,15 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
 
             vendorExtensions.put("x-regex", regex);
             vendorExtensions.put("x-modifiers", modifiers);
+        }
+    }
+
+    protected void setCaseType() {
+        final String caseType = String.valueOf(additionalProperties.get(CASE_OPTION));
+        if (CAMEL_CASE_OPTION.equalsIgnoreCase(caseType) || SNAKE_CASE_OPTION.equalsIgnoreCase(caseType) || KEBAB_CASE_OPTION.equalsIgnoreCase(caseType)) {
+            this.caseType = caseType;
+        } else {
+            this.caseType = SNAKE_CASE_OPTION;
         }
     }
 
@@ -251,7 +331,7 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
     }
 
     @Override
-    public String escapeReservedWord(String name) {           
+    public String escapeReservedWord(String name) {
         if(this.reservedWordsMappings().containsKey(name)) {
             return this.reservedWordsMappings().get(name);
         }
@@ -291,12 +371,20 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
 
     @Override
     public String apiTestFileFolder() {
-    	return outputFolder + File.separatorChar + testFolder;
+        return outputFolder + File.separatorChar + testFolder;
     }
 
     @Override
     public String modelTestFileFolder() {
-    	return outputFolder + File.separatorChar + testFolder;
+        return outputFolder + File.separatorChar + testFolder;
+    }
+
+    @Override
+    public String toInstantiationType(Property p) {
+        if (p instanceof MapProperty) {
+            return instantiationTypes.get("map");
+        }
+        return null;
     }
 
     @Override
@@ -341,13 +429,18 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         if (name.matches("^[A-Z_]*$")) {
             name = name.toLowerCase();
         }
+        if (CAMEL_CASE_OPTION.equalsIgnoreCase(this.caseType)) {
+            name = camelize(name, true);
+        } else if (KEBAB_CASE_OPTION.equalsIgnoreCase(this.caseType)) {
+            name = dashize(name);
+        } else {
+            // underscore the variable name
+            // petId => pet_id
+            name = underscore(name);
 
-        // underscore the variable name
-        // petId => pet_id
-        name = underscore(name);
-
-        // remove leading underscore
-        name = name.replaceAll("^_*", "");
+            // remove leading underscore
+            name = name.replaceAll("^_*", "");
+        }
 
         // for reserved word or word starting with number, append _
         if (isReservedWord(name) || name.matches("^\\d.*")) {
@@ -401,52 +494,28 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
 
     @Override
     public String toModelFilename(String name) {
-        name = sanitizeName(name); // FIXME: a parameter should not be assigned. Also declare the methods parameters as 'final'.
-        // remove dollar sign
-        name = name.replaceAll("$", "");
-
-        // model name cannot use reserved keyword, e.g. return
-        if (isReservedWord(name)) {
-            LOGGER.warn(name + " (reserved word) cannot be used as model filename. Renamed to " + underscore(dropDots("model_" + name)));
-            name = "model_" + name; // e.g. return => ModelReturn (after camelize)
-        }
-
-        // model name starts with number
-        if (name.matches("^\\d.*")) {
-            LOGGER.warn(name + " (model name starts with number) cannot be used as model name. Renamed to " + underscore("model_" + name));
-            name = "model_" + name; // e.g. 200Response => Model200Response (after camelize)
-        }
-
-        if (!StringUtils.isEmpty(modelNamePrefix)) {
-            name = modelNamePrefix + "_" + name;
-        }
-
-        if (!StringUtils.isEmpty(modelNameSuffix)) {
-            name = name + "_" + modelNameSuffix;
-        }
-
         // underscore the model file name
         // PhoneNumber => phone_number
-        return underscore(dropDots(name));
+        return underscore(dropDots(toModelName(name)));
     }
 
     @Override
     public String toModelTestFilename(String name) {
-    	return "test_" + toModelFilename(name);
-    };
+        return "test_" + toModelFilename(name);
+    }
 
     @Override
     public String toApiFilename(String name) {
         // replace - with _ e.g. created-at => created_at
         name = name.replaceAll("-", "_");
 
-        // e.g. PhoneNumberApi.rb => phone_number_api.rb
+        // e.g. PhoneNumberApi.py => phone_number_api.py
         return underscore(name) + "_api";
     }
 
     @Override
     public String toApiTestFilename(String name) {
-    	return "test_" + toApiFilename(name);
+        return "test_" + toApiFilename(name);
     }
 
     @Override
@@ -486,6 +555,10 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         this.packageName = packageName;
     }
 
+    public void setProjectName(String projectName) {
+        this.projectName= projectName;
+    }
+
     public void setPackageVersion(String packageVersion) {
         this.packageVersion = packageVersion;
     }
@@ -519,7 +592,10 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         if (p instanceof StringProperty) {
             StringProperty dp = (StringProperty) p;
             if (dp.getDefault() != null) {
-                return "'" + dp.getDefault() + "'";
+                if (Pattern.compile("\r\n|\r|\n").matcher(dp.getDefault()).find())
+                    return "'''" + dp.getDefault() + "'''";
+                else
+                    return "'" + dp.getDefault() + "'";
             }
         } else if (p instanceof BooleanProperty) {
             BooleanProperty dp = (BooleanProperty) p;
@@ -621,6 +697,11 @@ public class PythonClientCodegen extends DefaultCodegen implements CodegenConfig
         }
 
         p.example = example;
+    }
+
+    @Override
+    public String sanitizeTag(String tag) {
+        return sanitizeName(tag);
     }
 
     @Override

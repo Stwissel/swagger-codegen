@@ -4,6 +4,7 @@ import io.swagger.model.ReadOnlyFirst;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 import io.swagger.annotations.ApiModelProperty;
 import javax.xml.bind.annotation.XmlElement;
@@ -13,20 +14,25 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ArrayTest  {
   
-  @ApiModelProperty(example = "null", value = "")
-  private List<String> arrayOfString = new ArrayList<String>();
-  @ApiModelProperty(example = "null", value = "")
-  private List<List<Long>> arrayArrayOfInteger = new ArrayList<List<Long>>();
-  @ApiModelProperty(example = "null", value = "")
-  private List<List<ReadOnlyFirst>> arrayArrayOfModel = new ArrayList<List<ReadOnlyFirst>>();
+  @ApiModelProperty(value = "")
+  private List<String> arrayOfString = null;
 
+  @ApiModelProperty(value = "")
+  @Valid
+  private List<List<Long>> arrayArrayOfInteger = null;
+
+  @ApiModelProperty(value = "")
+  @Valid
+  private List<List<ReadOnlyFirst>> arrayArrayOfModel = null;
  /**
    * Get arrayOfString
    * @return arrayOfString
   **/
+  @JsonProperty("array_of_string")
   public List<String> getArrayOfString() {
     return arrayOfString;
   }
@@ -49,6 +55,7 @@ public class ArrayTest  {
    * Get arrayArrayOfInteger
    * @return arrayArrayOfInteger
   **/
+  @JsonProperty("array_array_of_integer")
   public List<List<Long>> getArrayArrayOfInteger() {
     return arrayArrayOfInteger;
   }
@@ -71,6 +78,7 @@ public class ArrayTest  {
    * Get arrayArrayOfModel
    * @return arrayArrayOfModel
   **/
+  @JsonProperty("array_array_of_model")
   public List<List<ReadOnlyFirst>> getArrayArrayOfModel() {
     return arrayArrayOfModel;
   }
@@ -106,7 +114,7 @@ public class ArrayTest  {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private static String toIndentedString(Object o) {
+  private static String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

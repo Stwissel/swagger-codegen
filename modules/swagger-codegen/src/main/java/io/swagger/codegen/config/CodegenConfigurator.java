@@ -12,6 +12,7 @@ import io.swagger.codegen.auth.AuthParser;
 import io.swagger.models.Swagger;
 import io.swagger.models.auth.AuthorizationValue;
 import io.swagger.parser.SwaggerParser;
+import io.swagger.parser.util.ParseOptions;
 import io.swagger.util.Json;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,7 +36,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  * It also has a convenience method for creating a ClientOptInput class which is THE object DefaultGenerator.java needs
  * to generate code.
  */
-public class CodegenConfigurator {
+public class CodegenConfigurator implements Serializable {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(CodegenConfigurator.class);
 
@@ -43,6 +45,8 @@ public class CodegenConfigurator {
     private String outputDir;
     private boolean verbose;
     private boolean skipOverwrite;
+    private Boolean skipAliasGeneration;
+    private boolean removeOperationIdPrefix;
     private String templateDir;
     private String auth;
     private String apiPackage;
@@ -61,11 +65,12 @@ public class CodegenConfigurator {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private Map<String, String> importMappings = new HashMap<String, String>();
     private Set<String> languageSpecificPrimitives = new HashSet<String>();
-    private Map<String, String>  reservedWordMappings = new HashMap<String, String>();
-    
-    private String gitUserId="GIT_USER_ID";
-    private String gitRepoId="GIT_REPO_ID";
-    private String releaseNote="Minor update";
+    private Map<String, String> reservedWordMappings = new HashMap<String, String>();
+
+    private String gitUserId = "GIT_USER_ID";
+    private String gitRepoId = "GIT_REPO_ID";
+    private String gitRepoBaseURL = "GIT_REPO_BASE_URL";
+    private String releaseNote = "Minor update";
     private String httpUserAgent;
 
     private final Map<String, Object> dynamicProperties = new HashMap<String, Object>(); //the map that holds the JsonAnySetter/JsonAnyGetter values
@@ -115,6 +120,19 @@ public class CodegenConfigurator {
         return this;
     }
 
+    public boolean getRemoveOperationIdPrefix() {
+        return removeOperationIdPrefix;
+    }
+
+    public CodegenConfigurator setRemoveOperationIdPrefix(boolean removeOperationIdPrefix) {
+        this.removeOperationIdPrefix = removeOperationIdPrefix;
+        return this;
+    }
+
+    public void setSkipAliasGeneration(Boolean skipAliasGeneration) {
+        this.skipAliasGeneration = skipAliasGeneration;
+    }
+
     public String getModelNameSuffix() {
         return modelNameSuffix;
     }
@@ -155,7 +173,7 @@ public class CodegenConfigurator {
 
         // check to see if the folder exists
         if (!(f.exists() && f.isDirectory())) {
-            throw new IllegalArgumentException("Template directory " + templateDir + " does not exist."); 
+            throw new IllegalArgumentException("Template directory " + templateDir + " does not exist.");
         }
 
         this.templateDir = f.getAbsolutePath();
@@ -266,7 +284,7 @@ public class CodegenConfigurator {
         this.additionalProperties = additionalProperties;
         return this;
     }
-    
+
     public CodegenConfigurator addAdditionalProperty(String key, Object value) {
         this.additionalProperties.put(key, value);
         return this;
@@ -322,6 +340,15 @@ public class CodegenConfigurator {
         return gitRepoId;
     }
 
+    public CodegenConfigurator setGitRepoBaseURL(String gitRepoBaseURL) {
+        this.gitRepoBaseURL = gitRepoBaseURL;
+        return this;
+    }
+
+    public String getGitRepoBaseURL() {
+        return gitRepoBaseURL;
+    }
+
     public CodegenConfigurator setGitRepoId(String gitRepoId) {
         this.gitRepoId = gitRepoId;
         return this;
@@ -341,19 +368,19 @@ public class CodegenConfigurator {
     }
 
     public CodegenConfigurator setHttpUserAgent(String httpUserAgent) {
-        this.httpUserAgent= httpUserAgent;
+        this.httpUserAgent = httpUserAgent;
         return this;
     }
-    
-    public  Map<String, String> getReservedWordsMappings() {
+
+    public Map<String, String> getReservedWordsMappings() {
         return reservedWordMappings;
     }
-    
+
     public CodegenConfigurator setReservedWordsMappings(Map<String, String> reservedWordsMappings) {
         this.reservedWordMappings = reservedWordsMappings;
         return this;
     }
-    
+
     public CodegenConfigurator addAdditionalReservedWordMapping(String key, String value) {
         this.reservedWordMappings.put(key, value);
         return this;
@@ -367,7 +394,7 @@ public class CodegenConfigurator {
         this.ignoreFileOverride = ignoreFileOverride;
         return this;
     }
-    
+
     public ClientOptInput toClientOptInput() {
 
         Validate.notEmpty(lang, "language must be specified");
@@ -381,14 +408,16 @@ public class CodegenConfigurator {
         config.setInputSpec(inputSpec);
         config.setOutputDir(outputDir);
         config.setSkipOverwrite(skipOverwrite);
+        config.setSkipAliasGeneration(skipAliasGeneration);
         config.setIgnoreFilePathOverride(ignoreFileOverride);
+        config.setRemoveOperationIdPrefix(removeOperationIdPrefix);
 
         config.instantiationTypes().putAll(instantiationTypes);
         config.typeMapping().putAll(typeMappings);
         config.importMapping().putAll(importMappings);
         config.languageSpecificPrimitives().addAll(languageSpecificPrimitives);
         config.reservedWordsMappings().putAll(reservedWordMappings);
-        
+
         checkAndSetAdditionalProperty(apiPackage, CodegenConstants.API_PACKAGE);
         checkAndSetAdditionalProperty(modelPackage, CodegenConstants.MODEL_PACKAGE);
         checkAndSetAdditionalProperty(invokerPackage, CodegenConstants.INVOKER_PACKAGE);
@@ -415,8 +444,10 @@ public class CodegenConfigurator {
                 .config(config);
 
         final List<AuthorizationValue> authorizationValues = AuthParser.parse(auth);
-
-        Swagger swagger = new SwaggerParser().read(inputSpec, authorizationValues, true);
+        ParseOptions parseOptions = new ParseOptions();
+        parseOptions.setResolve(true);
+        parseOptions.setFlatten(true);
+        Swagger swagger = new SwaggerParser().read(inputSpec, authorizationValues, parseOptions);
 
         input.opts(new ClientOpts())
                 .swagger(swagger);
@@ -440,8 +471,7 @@ public class CodegenConfigurator {
             String opt = langCliOption.getOpt();
             if (dynamicProperties.containsKey(opt)) {
                 codegenConfig.additionalProperties().put(opt, dynamicProperties.get(opt));
-            }
-            else if(systemProperties.containsKey(opt)) {
+            } else if (systemProperties.containsKey(opt)) {
                 codegenConfig.additionalProperties().put(opt, systemProperties.get(opt));
             }
         }
@@ -499,5 +529,5 @@ public class CodegenConfigurator {
         }
         return null;
     }
-
 }
+

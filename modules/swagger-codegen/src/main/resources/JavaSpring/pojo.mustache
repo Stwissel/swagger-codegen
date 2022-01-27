@@ -1,9 +1,30 @@
 /**
  * {{#description}}{{.}}{{/description}}{{^description}}{{classname}}{{/description}}
- */{{#description}}
-@ApiModel(description = "{{{description}}}"){{/description}}
-{{>generatedAnnotation}}{{#discriminator}}{{>typeInfoAnnotation}}{{/discriminator}}
+ */
+{{#description}}
+@ApiModel(description = "{{{description}}}")
+{{/description}}
+{{#useBeanValidation}}
+@Validated
+{{/useBeanValidation}}
+{{>generatedAnnotation}}
+{{#discriminator}}
+{{>typeInfoAnnotation}}
+{{/discriminator}}
+{{>xmlAnnotation}}
+{{#notNullJacksonAnnotation}}
+@JsonInclude(JsonInclude.Include.NON_NULL)
+{{/notNullJacksonAnnotation}}
+{{#ignoreUnknownJacksonAnnotation}}
+@JsonIgnoreProperties(ignoreUnknown = true)
+{{/ignoreUnknownJacksonAnnotation}}
+{{#additionalModelTypeAnnotations}}{{{.}}}
+{{/additionalModelTypeAnnotations}}
 public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#serializableModel}}implements Serializable{{/serializableModel}} {
+{{#serializableModel}}
+  private static final long serialVersionUID = 1L;
+
+{{/serializableModel}}
   {{#vars}}
     {{#isEnum}}
     {{^isContainer}}
@@ -18,12 +39,27 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
       {{/items}}
     {{/items.isEnum}}
   {{#jackson}}
-  @JsonProperty("{{baseName}}")
-  {{/jackson}}
+  @JsonProperty("{{baseName}}"){{#withXml}}
+  {{^isXmlWrapped}}
+  @JacksonXmlProperty({{#isXmlAttribute}}isAttribute = true, {{/isXmlAttribute}}{{#xmlNamespace}}namespace="{{xmlNamespace}}", {{/xmlNamespace}}localName = "{{#xmlName}}{{xmlName}}{{/xmlName}}{{^xmlName}}{{baseName}}{{/xmlName}}")
+  {{/isXmlWrapped}}
+  {{#isXmlWrapped}}
+  // Is a container wrapped={{isXmlWrapped}}
+  // items.xmlName={{items.xmlName}}
+  @JacksonXmlProperty({{#xmlNamespace}}namespace="{{xmlNamespace}}", {{/xmlNamespace}}localName = "{{#items.xmlName}}{{items.xmlName}}{{/items.xmlName}}{{^items.xmlName}}{{items.baseName}}{{/items.xmlName}}")
+  @JacksonXmlElementWrapper(useWrapping = {{isXmlWrapped}}, {{#xmlNamespace}}namespace="{{xmlNamespace}}", {{/xmlNamespace}}localName = "{{#xmlName}}{{xmlName}}{{/xmlName}}{{^xmlName}}{{baseName}}{{/xmlName}}")
+  {{/isXmlWrapped}}
+  {{/withXml}}{{/jackson}}
   {{#gson}}
   @SerializedName("{{baseName}}")
   {{/gson}}
+  {{#isContainer}}
+  {{#useBeanValidation}}@Valid{{/useBeanValidation}}
+  private {{{datatypeWithEnum}}} {{name}}{{#required}} = {{{defaultValue}}}{{/required}}{{^required}} = null{{/required}};
+  {{/isContainer}}
+  {{^isContainer}}
   private {{{datatypeWithEnum}}} {{name}} = {{{defaultValue}}};
+  {{/isContainer}}
 
   {{/vars}}
   {{#vars}}
@@ -34,6 +70,11 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
   {{#isListContainer}}
 
   public {{classname}} add{{nameInCamelCase}}Item({{{items.datatypeWithEnum}}} {{name}}Item) {
+    {{^required}}
+    if (this.{{name}} == null) {
+      this.{{name}} = {{{defaultValue}}};
+    }
+    {{/required}}
     this.{{name}}.add({{name}}Item);
     return this;
   }
@@ -41,12 +82,17 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
   {{#isMapContainer}}
 
   public {{classname}} put{{nameInCamelCase}}Item(String key, {{{items.datatypeWithEnum}}} {{name}}Item) {
+    {{^required}}
+    if (this.{{name}} == null) {
+      this.{{name}} = {{{defaultValue}}};
+    }
+    {{/required}}
     this.{{name}}.put(key, {{name}}Item);
     return this;
   }
   {{/isMapContainer}}
 
-   /**
+  /**
   {{#description}}
    * {{{description}}}
   {{/description}}
@@ -64,8 +110,8 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
  {{#vendorExtensions.extraAnnotation}}
   {{{vendorExtensions.extraAnnotation}}}
   {{/vendorExtensions.extraAnnotation}}
-  @ApiModelProperty({{#example}}example = "{{example}}", {{/example}}{{#required}}required = {{required}}, {{/required}}{{#isReadOnly}}readOnly = {{{isReadOnly}}}, {{/isReadOnly}}value = "{{{description}}}")
-{{#useBeanValidation}}{{>beanValidation}}{{/useBeanValidation}}  public {{{datatypeWithEnum}}} {{getter}}() {
+  @ApiModelProperty({{#example}}example = "{{{example}}}", {{/example}}{{#required}}required = {{required}}, {{/required}}{{#isReadOnly}}readOnly = {{{isReadOnly}}}, {{/isReadOnly}}value = "{{{description}}}")
+{{#useBeanValidation}}{{>beanValidation}}{{/useBeanValidation}}  public {{{datatypeWithEnum}}} {{#isBoolean}}is{{/isBoolean}}{{getter}}() {
     return {{name}};
   }
 
@@ -87,7 +133,7 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#seriali
     return {{#vars}}Objects.equals(this.{{name}}, {{classVarName}}.{{name}}){{#hasMore}} &&
         {{/hasMore}}{{/vars}}{{#parent}} &&
         super.equals(o){{/parent}};{{/hasVars}}{{^hasVars}}
-    return true;{{/hasVars}}
+    return super.equals(o);{{/hasVars}}
   }
 
   @Override

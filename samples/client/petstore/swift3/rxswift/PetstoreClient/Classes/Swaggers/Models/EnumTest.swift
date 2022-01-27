@@ -9,18 +9,19 @@ import Foundation
 
 
 open class EnumTest: JSONEncodable {
+
     public enum EnumString: String { 
         case upper = "UPPER"
         case lower = "lower"
         case empty = ""
     }
     public enum EnumInteger: Int32 { 
-        case number1 = 1
-        case numberminus1 = -1
+        case _1 = 1
+        case number1 = -1
     }
     public enum EnumNumber: Double { 
-        case number11 = 1.1
-        case numberminus12 = -1.2
+        case _11 = 1.1
+        case number12 = -1.2
     }
     public var enumString: EnumString?
     public var enumInteger: EnumInteger?
@@ -36,7 +37,9 @@ open class EnumTest: JSONEncodable {
         nillableDictionary["enum_integer"] = self.enumInteger?.rawValue
         nillableDictionary["enum_number"] = self.enumNumber?.rawValue
         nillableDictionary["outerEnum"] = self.outerEnum?.encodeToJSON()
+
         let dictionary: [String:Any] = APIHelper.rejectNil(nillableDictionary) ?? [:]
         return dictionary
     }
 }
+

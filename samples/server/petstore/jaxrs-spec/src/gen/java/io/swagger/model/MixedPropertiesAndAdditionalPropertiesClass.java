@@ -1,22 +1,26 @@
 package io.swagger.model;
 
 import io.swagger.model.Animal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.io.Serializable;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 
 import io.swagger.annotations.*;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class MixedPropertiesAndAdditionalPropertiesClass   {
+public class MixedPropertiesAndAdditionalPropertiesClass  implements Serializable {
   
-  private UUID uuid = null;
-  private javax.xml.datatype.XMLGregorianCalendar dateTime = null;
-  private Map<String, Animal> map = new HashMap<String, Animal>();
+  private @Valid UUID uuid = null;
+  private @Valid Date dateTime = null;
+  private @Valid Map<String, Animal> map = new HashMap<String, Animal>();
 
   /**
    **/
@@ -26,7 +30,8 @@ public class MixedPropertiesAndAdditionalPropertiesClass   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("uuid")
   public UUID getUuid() {
     return uuid;
   }
@@ -36,17 +41,18 @@ public class MixedPropertiesAndAdditionalPropertiesClass   {
 
   /**
    **/
-  public MixedPropertiesAndAdditionalPropertiesClass dateTime(javax.xml.datatype.XMLGregorianCalendar dateTime) {
+  public MixedPropertiesAndAdditionalPropertiesClass dateTime(Date dateTime) {
     this.dateTime = dateTime;
     return this;
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
-  public javax.xml.datatype.XMLGregorianCalendar getDateTime() {
+  @ApiModelProperty(value = "")
+  @JsonProperty("dateTime")
+  public Date getDateTime() {
     return dateTime;
   }
-  public void setDateTime(javax.xml.datatype.XMLGregorianCalendar dateTime) {
+  public void setDateTime(Date dateTime) {
     this.dateTime = dateTime;
   }
 
@@ -58,7 +64,8 @@ public class MixedPropertiesAndAdditionalPropertiesClass   {
   }
 
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
+  @JsonProperty("map")
   public Map<String, Animal> getMap() {
     return map;
   }
@@ -68,7 +75,7 @@ public class MixedPropertiesAndAdditionalPropertiesClass   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -102,10 +109,11 @@ public class MixedPropertiesAndAdditionalPropertiesClass   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
   }
 }
+

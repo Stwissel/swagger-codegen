@@ -2,6 +2,7 @@ package io.swagger.model;
 
 import io.swagger.annotations.ApiModel;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
 import io.swagger.annotations.ApiModelProperty;
 import javax.xml.bind.annotation.XmlElement;
@@ -11,19 +12,24 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+  * Model for testing model name starting with number
+ **/
 @ApiModel(description="Model for testing model name starting with number")
 public class Model200Response  {
   
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   private Integer name = null;
-  @ApiModelProperty(example = "null", value = "")
-  private String propertyClass = null;
 
+  @ApiModelProperty(value = "")
+  private String propertyClass = null;
  /**
    * Get name
    * @return name
   **/
+  @JsonProperty("name")
   public Integer getName() {
     return name;
   }
@@ -41,6 +47,7 @@ public class Model200Response  {
    * Get propertyClass
    * @return propertyClass
   **/
+  @JsonProperty("class")
   public String getPropertyClass() {
     return propertyClass;
   }
@@ -70,7 +77,7 @@ public class Model200Response  {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private static String toIndentedString(Object o) {
+  private static String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

@@ -14,35 +14,80 @@ import org.apache.cxf.jaxrs.ext.multipart.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiResponse;
 import io.swagger.jaxrs.PATCH;
 import javax.validation.constraints.*;
+import javax.validation.Valid;
 
+/**
+ * Swagger Petstore
+ *
+ * <p>This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\
+ *
+ */
 @Path("/")
 @Api(value = "/", description = "")
 public interface StoreApi  {
 
+    /**
+     * Delete purchase order by ID
+     *
+     * For valid response try integer IDs with value &lt; 1000. Anything above 1000 or nonintegers will generate API errors
+     *
+     */
     @DELETE
-    @Path("/store/order/{orderId}")
+    @Path("/store/order/{order_id}")
     @Produces({ "application/xml", "application/json" })
     @ApiOperation(value = "Delete purchase order by ID", tags={ "store",  })
-    public void deleteOrder(@PathParam("orderId") String orderId);
+    @ApiResponses(value = { 
+        @ApiResponse(code = 400, message = "Invalid ID supplied"),
+        @ApiResponse(code = 404, message = "Order not found") })
+    public void deleteOrder(@PathParam("order_id") String orderId);
 
+    /**
+     * Returns pet inventories by status
+     *
+     * Returns a map of status codes to quantities
+     *
+     */
     @GET
     @Path("/store/inventory")
     @Produces({ "application/json" })
     @ApiOperation(value = "Returns pet inventories by status", tags={ "store",  })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "successful operation", response = Map.class, responseContainer = "Map") })
     public Map<String, Integer> getInventory();
 
+    /**
+     * Find purchase order by ID
+     *
+     * For valid response try integer IDs with value &lt;&#x3D; 5 or &gt; 10. Other values will generated exceptions
+     *
+     */
     @GET
-    @Path("/store/order/{orderId}")
+    @Path("/store/order/{order_id}")
     @Produces({ "application/xml", "application/json" })
     @ApiOperation(value = "Find purchase order by ID", tags={ "store",  })
-    public Order getOrderById(@PathParam("orderId") Long orderId);
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "successful operation", response = Order.class),
+        @ApiResponse(code = 400, message = "Invalid ID supplied"),
+        @ApiResponse(code = 404, message = "Order not found") })
+    public Order getOrderById(@PathParam("order_id") @Min(1L) @Max(5L) Long orderId);
 
+    /**
+     * Place an order for a pet
+     *
+     * 
+     *
+     */
     @POST
     @Path("/store/order")
     @Produces({ "application/xml", "application/json" })
     @ApiOperation(value = "Place an order for a pet", tags={ "store" })
-    public Order placeOrder(Order body);
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "successful operation", response = Order.class),
+        @ApiResponse(code = 400, message = "Invalid Order") })
+    public Order placeOrder(@Valid Order body);
 }
 

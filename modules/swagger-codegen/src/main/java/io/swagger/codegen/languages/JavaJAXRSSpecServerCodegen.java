@@ -1,29 +1,38 @@
 package io.swagger.codegen.languages;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-
 import io.swagger.codegen.CliOption;
 import io.swagger.codegen.CodegenConstants;
 import io.swagger.codegen.CodegenModel;
 import io.swagger.codegen.CodegenOperation;
+import io.swagger.codegen.CodegenParameter;
 import io.swagger.codegen.CodegenProperty;
 import io.swagger.codegen.SupportingFile;
-import io.swagger.codegen.languages.features.BeanValidationFeatures;
 import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
-import io.swagger.models.properties.Property;
+import io.swagger.models.parameters.Parameter;
 import io.swagger.util.Json;
+import org.apache.commons.io.FileUtils;
 
-public class JavaJAXRSSpecServerCodegen extends AbstractJavaJAXRSServerCodegen 
-{    
-    
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public class JavaJAXRSSpecServerCodegen extends AbstractJavaJAXRSServerCodegen
+{
+
+    public static final String INTERFACE_ONLY = "interfaceOnly";
+    public static final String RETURN_RESPONSE = "returnResponse";
+    public static final String GENERATE_POM = "generatePom";
+
+    private boolean interfaceOnly = false;
+    private boolean returnResponse = false;
+    private boolean generatePom = true;
+
     public JavaJAXRSSpecServerCodegen()
     {
         super();
@@ -48,9 +57,9 @@ public class JavaJAXRSSpecServerCodegen extends AbstractJavaJAXRSServerCodegen
         additionalProperties.put("title", title);
 
         typeMapping.put("date", "LocalDate");
-        typeMapping.put("DateTime", "javax.xml.datatype.XMLGregorianCalendar"); // Map DateTime fields to Java standart class 'XMLGregorianCalendar'
 
         importMapping.put("LocalDate", "org.joda.time.LocalDate");
+        importMapping.put("InputStream", "java.io.InputStream");
 
         super.embeddedTemplateDir = templateDir = JAXRS_TEMPLATE_DIRECTORY_NAME + File.separator + "spec";
 
@@ -60,7 +69,7 @@ public class JavaJAXRSSpecServerCodegen extends AbstractJavaJAXRSServerCodegen
                 break;
             }
         }
-                
+
         CliOption library = new CliOption(CodegenConstants.LIBRARY, "library template (sub-template) to use");
         library.setDefault(DEFAULT_LIBRARY);
 
@@ -70,21 +79,46 @@ public class JavaJAXRSSpecServerCodegen extends AbstractJavaJAXRSServerCodegen
         library.setEnum(supportedLibraries);
 
         cliOptions.add(library);
+        cliOptions.add(CliOption.newBoolean(GENERATE_POM, "Whether to generate pom.xml if the file does not already exist.").defaultValue(String.valueOf(generatePom)));
+        cliOptions.add(CliOption.newBoolean(INTERFACE_ONLY, "Whether to generate only API interface stubs without the server files.").defaultValue(String.valueOf(interfaceOnly)));
+        cliOptions.add(CliOption.newBoolean(RETURN_RESPONSE, "Whether generate API interface should return javax.ws.rs.core.Response instead of a deserialized entity. Only useful if interfaceOnly is true.").defaultValue(String.valueOf(returnResponse)));
     }
-    
+
     @Override
     public void processOpts()
     {
+        if (additionalProperties.containsKey(GENERATE_POM)) {
+            generatePom = Boolean.valueOf(additionalProperties.get(GENERATE_POM).toString());
+        }
+        if (additionalProperties.containsKey(INTERFACE_ONLY)) {
+            interfaceOnly = Boolean.valueOf(additionalProperties.get(INTERFACE_ONLY).toString());
+            if (!interfaceOnly) {
+                additionalProperties.remove(INTERFACE_ONLY);
+            }
+        }
+        if (additionalProperties.containsKey(RETURN_RESPONSE)) {
+            returnResponse = Boolean.valueOf(additionalProperties.get(RETURN_RESPONSE).toString());
+            if (!returnResponse) {
+                additionalProperties.remove(RETURN_RESPONSE);
+            }
+        }
+        if (interfaceOnly) {
+            // Change default artifactId if genereating interfaces only, before command line options are applied in base class.
+            artifactId = "swagger-jaxrs-client";
+        }
+
         super.processOpts();
-        
+
         supportingFiles.clear(); // Don't need extra files provided by AbstractJAX-RS & Java Codegen
-        writeOptional(outputFolder, new SupportingFile("pom.mustache", "", "pom.xml"));
-        
-        writeOptional(outputFolder, new SupportingFile("RestApplication.mustache",
-                (sourceFolder + '/' + invokerPackage).replace(".", "/"), "RestApplication.java"));
-        
-    } 
-    
+        if (generatePom) {
+            writeOptional(outputFolder, new SupportingFile("pom.mustache", "", "pom.xml"));
+        }
+        if (!interfaceOnly) {
+            writeOptional(outputFolder, new SupportingFile("RestApplication.mustache",
+                    (sourceFolder + '/' + invokerPackage).replace(".", "/"), "RestApplication.java"));
+        }
+    }
+
 
     @Override
     public String getName()
@@ -119,7 +153,7 @@ public class JavaJAXRSSpecServerCodegen extends AbstractJavaJAXRSServerCodegen
         opList.add(co);
         co.baseName = basePath;
     }
-    
+
     @Override
     public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
         super.postProcessModelProperty(model, property);
@@ -130,13 +164,40 @@ public class JavaJAXRSSpecServerCodegen extends AbstractJavaJAXRSServerCodegen
         model.imports.remove("JsonValue");
         model.imports.remove("JsonProperty");
     }
-    
+
+    @Override
+    public void postProcessModelProperties(CodegenModel model){
+        if (model.vars == null || model.vars.isEmpty()) {
+            return;
+        }
+        final boolean useJackson = Boolean.valueOf(String.valueOf(additionalProperties.get("jackson")));
+        boolean hasEnumProperty = false;
+        for(CodegenProperty codegenProperty : model.vars) {
+            postProcessModelProperty(model, codegenProperty);
+            if (codegenProperty.isEnum) {
+                hasEnumProperty = true;
+            }
+        }
+        if (useJackson && hasEnumProperty) {
+            model.imports.add("JsonValue");
+            model.imports.add("JsonCreator");
+        }
+    }
+
+    public CodegenParameter fromParameter(Parameter param, Set<String> imports) {
+        final CodegenParameter parameter = super.fromParameter(param, imports);
+        if (parameter.isFile) {
+            imports.add("InputStream");
+        }
+        return parameter;
+    }
+
     @Override
     public void preprocessSwagger(Swagger swagger) {
-        //copy input swagger to output folder 
+        //copy input swagger to output folder
         try {
             String swaggerJson = Json.pretty(swagger);
-            FileUtils.writeStringToFile(new File(outputFolder + File.separator + "swagger.json"), swaggerJson);
+            FileUtils.writeStringToFile(new File(outputFolder + File.separator + "swagger.json"), swaggerJson, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e.getCause());
         }
@@ -144,8 +205,7 @@ public class JavaJAXRSSpecServerCodegen extends AbstractJavaJAXRSServerCodegen
 
     }
     @Override
-    public String getHelp()
-    {
+    public String getHelp() {
         return "Generates a Java JAXRS Server according to JAXRS 2.0 specification.";
     }
 }

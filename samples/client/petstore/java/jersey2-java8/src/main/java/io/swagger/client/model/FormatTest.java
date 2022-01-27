@@ -14,8 +14,10 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
+import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
@@ -78,7 +80,7 @@ public class FormatTest {
    * maximum: 100
    * @return integer
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Integer getInteger() {
     return integer;
   }
@@ -98,7 +100,7 @@ public class FormatTest {
    * maximum: 200
    * @return int32
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Integer getInt32() {
     return int32;
   }
@@ -116,7 +118,7 @@ public class FormatTest {
    * Get int64
    * @return int64
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Long getInt64() {
     return int64;
   }
@@ -136,7 +138,7 @@ public class FormatTest {
    * maximum: 543.2
    * @return number
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public BigDecimal getNumber() {
     return number;
   }
@@ -156,7 +158,7 @@ public class FormatTest {
    * maximum: 987.6
    * @return _float
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Float getFloat() {
     return _float;
   }
@@ -176,7 +178,7 @@ public class FormatTest {
    * maximum: 123.4
    * @return _double
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public Double getDouble() {
     return _double;
   }
@@ -194,7 +196,7 @@ public class FormatTest {
    * Get string
    * @return string
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public String getString() {
     return string;
   }
@@ -212,7 +214,7 @@ public class FormatTest {
    * Get _byte
    * @return _byte
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public byte[] getByte() {
     return _byte;
   }
@@ -230,7 +232,7 @@ public class FormatTest {
    * Get binary
    * @return binary
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public byte[] getBinary() {
     return binary;
   }
@@ -248,7 +250,7 @@ public class FormatTest {
    * Get date
    * @return date
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public LocalDate getDate() {
     return date;
   }
@@ -266,7 +268,7 @@ public class FormatTest {
    * Get dateTime
    * @return dateTime
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public OffsetDateTime getDateTime() {
     return dateTime;
   }
@@ -284,7 +286,7 @@ public class FormatTest {
    * Get uuid
    * @return uuid
   **/
-  @ApiModelProperty(example = "null", value = "")
+  @ApiModelProperty(value = "")
   public UUID getUuid() {
     return uuid;
   }
@@ -302,7 +304,7 @@ public class FormatTest {
    * Get password
    * @return password
   **/
-  @ApiModelProperty(example = "null", required = true, value = "")
+  @ApiModelProperty(required = true, value = "")
   public String getPassword() {
     return password;
   }
@@ -328,8 +330,8 @@ public class FormatTest {
         Objects.equals(this._float, formatTest._float) &&
         Objects.equals(this._double, formatTest._double) &&
         Objects.equals(this.string, formatTest.string) &&
-        Objects.equals(this._byte, formatTest._byte) &&
-        Objects.equals(this.binary, formatTest.binary) &&
+        Arrays.equals(this._byte, formatTest._byte) &&
+        Arrays.equals(this.binary, formatTest.binary) &&
         Objects.equals(this.date, formatTest.date) &&
         Objects.equals(this.dateTime, formatTest.dateTime) &&
         Objects.equals(this.uuid, formatTest.uuid) &&
@@ -338,7 +340,7 @@ public class FormatTest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(integer, int32, int64, number, _float, _double, string, _byte, binary, date, dateTime, uuid, password);
+    return Objects.hash(integer, int32, int64, number, _float, _double, string, Arrays.hashCode(_byte), Arrays.hashCode(binary), date, dateTime, uuid, password);
   }
 
 
@@ -374,6 +376,6 @@ public class FormatTest {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
 }
 
